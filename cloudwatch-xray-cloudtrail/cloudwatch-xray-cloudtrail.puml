@@ -1,0 +1,36 @@
+@startmindmap mindmap
+
+title CloudWatch, X-Ray, CloudTrail
+
+<style>
+mindmapDiagram {
+  .migration {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .functions {
+    BackgroundColor LightSkyBlue
+  }
+  .watch {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>Monitoring&Audit
+ * CloudWatch\n*collect and track metrics\n*collect, analyze and store logs\n*send notifications(events)\n when something happens\n*raise alarms based on metrics/events <<watch>>
+  * * metric is a variable to monitor\n*metric belongs to namespace\n*dimension is attribute of a metric, eg.\n**instance ID\n**environment\n*up to 10 dimensions per metric\n*regular metrics - every 5 minutes\n*detailed metrics - every 1 minute, paid <<watch>>
+  * Custom metrics\n*can push own metrics from the instance\n*use PutMetricData API call for this\n*can add dimensions (attributes)\n*accepts data points 2 weeks in past\n*accepts data points 2 hours in the future\n*make sure EC2 instance time is correct <<watch>>
+  * Logs\n*can be sent to S3 or Kinesis Data Streams\n*can have expiration policy eg 30 days\n*can be filtered, eg ERROR and turned into metrics\n*metrics can be turned into alarms\n*use Logs Insinghts to query logs\n*use Log Subscription to send logs in near realtime\nto Amazon S3, Kinesis or ElasticSearch\n*can be aggregated from multiple Regions/Accounts\n*to push logs from EC2, you must run CloudWatch Agent\nor Unified Agent, and EC2 must have proper IAM permissions\n*Unified Agent adds CPU, Disk, RAM, Network, Processes and Swap\nmetrics along with logs, it is new and preferred <<watch>>
+  * Alarms - targets <<watch>>
+   * EC2 Instance\n*Stop, Terminate, Reboot, Recover EC2\n*Instance Status = VM status\n*System Status = HW status <<watch>>
+   * Auto Scaling Action <<watch>>
+   * send notifiaction to SNS <<watch>>
+  * Events\n*created based on EventPattern-match some AWS Service Event\n*or scheduled with eg. CRON\n*source event is stored as JSON and passed to event target <<watch>>
+  * Event Bridge - will replace CloudWatch Events\n*builds upon and extends CloudWatch Events <<watch>>
+ * X-Ray\n*troubleshoot performance and errors\n*distributed tracing for microservices\n*to enable it:\n**use AWS X-Ray SDK in your code\n**install X-Ray daemon on the system\n**ensure X-Ray write IAM permissions
+ * CloudTrail\n*internal monitoring of API calls being made\n*audit changes made to resources by your users
+@endmindmap
