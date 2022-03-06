@@ -10,8 +10,9 @@ echo "${HEADER}" >> README.md
 sections=$(find . -maxdepth 1 -type d ! -name '.*')
 for section_dir in $sections
 do
-	plantuml -tpng "$section_dir/*.puml" -o "$section_dir"
+	plantuml -tpng "$section_dir/*.puml"
     section_header="$(echo $section_dir | cut -c 3-)"
+    echo "Processing $section_header..."
     echo "## $section_header" >> README.md
 
     for diagram_path in $(ls $section_dir/*.png)
@@ -21,3 +22,5 @@ do
         echo "" >> README.md
     done
 done
+
+echo "Done."
