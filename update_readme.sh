@@ -11,12 +11,15 @@ sections=$(find . -maxdepth 1 -type d ! -name '.*')
 for section_dir in $sections
 do
 	plantuml -tpng "$section_dir/*.puml"
-    section_header="$(echo $section_dir | cut -c 3-)"
+    section_header="${section_dir##*/}" # cut leading "./"
     echo "Processing $section_header..."
     echo "## $section_header" >> README.md
 
     for diagram_path in $(ls $section_dir/*.png)
     do
+        basename=${diagram_path##*/}
+        noext=${basename%%.*}
+        echo "### $noext" >> README.md
         echo "| ![$section_header]($diagram_path) |" >> README.md
         echo "| ------ |" >> README.md
         echo "" >> README.md
