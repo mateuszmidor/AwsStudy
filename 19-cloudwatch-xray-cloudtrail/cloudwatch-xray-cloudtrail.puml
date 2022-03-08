@@ -4,13 +4,13 @@ title CloudWatch, X-Ray, CloudTrail
 
 <style>
 mindmapDiagram {
-  .migration {
+  .trail {
     BackgroundColor Pink
   }
   .orange {
     BackgroundColor orange
   }
-  .functions {
+  .xray {
     BackgroundColor LightSkyBlue
   }
   .watch {
@@ -31,6 +31,9 @@ mindmapDiagram {
    * send notifiaction to SNS <<watch>>
   * Events\n*created based on EventPattern-match some AWS Service Event\n*or scheduled with eg. CRON\n*source event is stored as JSON and passed to event target <<watch>>
   * Event Bridge - will replace CloudWatch Events\n*builds upon and extends CloudWatch Events <<watch>>
- * X-Ray\n*troubleshoot performance and errors\n*distributed tracing for microservices\n*to enable it:\n**use AWS X-Ray SDK in your code\n**install X-Ray daemon on the system\n**ensure X-Ray write IAM permissions
- * CloudTrail\n*internal monitoring of API calls being made\n*audit changes made to resources by your users
+ * X-Ray\n*troubleshoot performance and errors\n*distributed tracing for microservices\n*to enable it:\n**use AWS X-Ray SDK in your code\n**install X-Ray daemon on the system\n**ensure X-Ray write IAM permissions\n*Segment - information describing\nrequest travel between 2 apps\n*Sub-segment - to add details\n*Trace - segments collected together\nto represent end-to-end communication\n*Sampling - limit number of requests\ntowards X-Ray service to reduce cost\n*Annotations - indexed KeyValue data\nfor searching and filtering\n*MetaData - non-indexed KeyValue data,\nnot for searching <<xray>>
+  * Sampling\n*paid based on how many requests are sent to X-Ray service\n*reservoir - minimum no. of samples to record each seconds\n*rate  percentage 0-1 how many of all requests to record,\nsend to 1 to record all (good for debug, expensive for production)\n*changing the values takes effect immediately without restarting <<xray>>
+  * X-Ray integration options:\n*EC2\n**daemon - single instance per EC2\n**sidecar - like in kubernetes\n*Fargate\n**sidecar only\n**in task definition must map port UDP 2000 in x-ray container\nand link application container with x-ray container <<xray>>
+ * CloudTrail\n*internal monitoring of API calls being made\n*audit changes made to resources by your users\n*who deleted my EC2?!\n*enabled by default <<trail>>
+  * CloudTrail Events:\n*Management Events\n**eg. attach policy, config security, setup logging etc\n*Data Events\n**eg. S3 Get, Put, Delete Object\n**disabled by default - high data volume\n*Insight Events\n**detect unusual activity\n**analyzes management activity to create baseline\n**then continuously alanyzes write events to detect\nunusual patterns\n*events are stored for 90 days, can send them to S3 <<trail>>
 @endmindmap

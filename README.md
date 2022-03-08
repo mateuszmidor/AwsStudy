@@ -11,3 +11,20 @@ plantuml -tpng *.puml
 
 
 ## Sections
+## 19-cloudwatch-xray-cloudtrail
+### mindmap
+| ![19-cloudwatch-xray-cloudtrail](./19-cloudwatch-xray-cloudtrail/mindmap.png) |
+| ------ |
+
+### xray-integration-options
+| ![19-cloudwatch-xray-cloudtrail](./19-cloudwatch-xray-cloudtrail/xray-integration-options.png) |
+| ------ |
+
+### xray-read-policy
+| ![19-cloudwatch-xray-cloudtrail](./19-cloudwatch-xray-cloudtrail/xray-read-policy.png) |
+| ------ |
+
+### xray-write-policy
+| ![19-cloudwatch-xray-cloudtrail](./19-cloudwatch-xray-cloudtrail/xray-write-policy.png) |
+| ------ |
+
