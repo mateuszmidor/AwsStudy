@@ -1,0 +1,44 @@
+@startmindmap 00-diagram
+
+title AWS Integration & Messaging: SQS, SNS, Kinesis
+
+<style>
+mindmapDiagram {
+  .sns {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .kinesis {
+    BackgroundColor LightSkyBlue
+  }
+  .sqs {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>SQS, SNS, Kinesis\n*SQS - queue model\n*SNS - pub/sub model\n*Kinesis - real time streaming
+ * Simple Queuing Service\n*producer-consumer\n*to decouple applications...\n*...or tiers: frontend from backend\n*unlimited messages in queue\n*message lives 4 days (max is 14)\n*latency: <10ms to send or receive\n*message size max 256KB\n*message can be delivered twice:\nso-called: at least once delivery\n*metric: ApproximateNumberOfMessages <<sqs>>
+  * SQS Security:\n*encryption\n*access control with IAM policies\n*SQS access policies (like in S3)\n**to allow access from other services eg. SNS, S3 eg.\nS3 send message on object created\n**to allow cross-account access <<sqs>>
+  * SQS Message Visibility Timeout\n*when message is received by consumer,\nit becomes invisible for other consumes for default of 30 sec\n*if consumer doesn't process and delete the msg on time,\nit becomes visible and can be processed by other consumer\n*this means message being processed twice\n*to prevent this, use ChangeMessageVisibility API <<sqs>>
+  * Special queues:\n*Dead Letter Queue - store messages that were received > ntimes\n*Delay Queue - message waits up to 15 minutes before being read <<sqs>>
+  * FIFO Queue\n*queue name must end with .fifo\n*message order is maintained\n*throughput is limited to 300 msgs/s, or 3000 in batch mode\n*exactly once delivery by removing duplicates (in 5 minutes time window):\n**content-based deduplication - SHA of message body)\n**explicit DeduplicationID\n*message grouping:\n**messages are assigned MessageGroupID\n**ordering is preserved within message group\n**each group can have separate consumer - for parallel processing <<sqs>>
+  * Concepts:\n*Long polling - block on read if the queue is empty. Reduces api calls\n*Extended Client - use S3 as a tmp storage for sending 1GB message\n*must know API:\n**CreateQueue(MessageRetentionPeriod), DeleteQueue\n**PurgeQueue\n**SendMessage, ReceiveMessage, DeleteMessage\n**MaxNumberOfMessages(1 - 10) - how many msgs to receive at a time\n**ReceiveMessageWaitTimeSeconds - max time a Long Poll should block\n**ChangeMessageVisibility - change message timeout <<sqs>>
+ * Simple Notification Service\n*publisher-topic-subscribers\n*subscriber can filter messages\n*can be used for Fan-Out pattern\n*max of 10'000'000 subscribers/topic\n*max of 100'000 topics\n*subscriber can be:\n**SQS, HTTP, Lambda, Email, SMS, Kinesis\n*publish modes:\n**Topic Publish(using SDK)\n**Direct Publish (to phone, mobile SDK) <<sns>>
+  * Security\n*encryption\n*access control with IAM policies\n*SNS access policies (like in S3)\n**to allow access from other services eg.\nS3 send message on object created\n**to allow cross-account access <<sns>>
+ * Kinesis\n*collect, process and analyze real time data\n*application logs, metrics, website clickstreams, IoT telemetry\n**Data Streams - capture, process, store data steams d\n**Data Firehose - load data streams into AWS data stores\n**Data Analytics - alalyze data streams with SQL or Apache Flink\n**Video Streams - capture, process and store video streams <<kinesis>>
+  * Data Streams\n*for data records to be streamed through it\n*Producers-DataStreams-Consumers\n*consist of data shards, eg. 7 shards\n*billing is per shard\n*data retention is 1 to 365 days, 1 is default\n*can replay(process again) data\n*inserted records are immutable <<kinesis>>
+   * Security:\n*IAM policies\n*Encryption\n*VPC endpoints to access Kinesis within VPC <<kinesis>>
+   * Record:\n*Sequence Number\n*Partition Key(maps to target shard)\n*Data Blob (max 1MB) <<kinesis>>
+   * Producers:\n*AWS SDK - simple producers\n*Kinesis Producer Library(KPL) - Java, C++\n*Kinesis Agent - for streaming logs\n*write limit is 1MB/s or 1000 records/shard/s\n*use PutRecord API\n*ProvisionedThroughtputExceeded - >1MB/s\nor >1000 records/shard/s:\n**use exponential backoff\n**scale shards - split shard into 2 shards <<kinesis>>
+   * Consumers:\n*AWS Lambda\n*Kinesis Data Analytics\n*Kinesis Data Firehose\n*Custom Consumer (AWS SDK)\n*Kinesis Client Library (KCL)\n*read limit of 2MB/s/shard\n**shared(classic) fan-out consumer - pull model:\nGetRecords(), limit shared across consumers ($)\n**enhanced fan-out consumer - push model:\nSubscribeToShard(), each consumer gets 2MB/s ($$$) <<kinesis>>
+   * Kinesis Client Library (KCL)\n*at most as many instances as shards\n*1 shard is read by 1 instance\n**4 shards = max 4 KCL instances\n**6 shards = max 6 KCL instances\n*shard reading progress is tracked\nby DynamoDB <<kinesis>>
+  * Fire Hose\n*read records from producers like:\n**Data Streams\n**AWS IoT\n**Cloud Watch\n**SKD, KPL, Agent, Client, Application\n*optionally transform them with Lambda\n*write records in batches to:\n**S3\n**Amazon Redshift (data warehouse)\n**Amazon Elastisearch\n**various 3rd party destinations\n**HTTP endpoint\n*pay for data going through FireHose\n*near realtime - processing in batches\n*automatic scaling, fully managed\n*no replay capability <<kinesis>>
+  * Analytics\n*source records from DataStreams or Firehose\n*analyze stream of records using SQL\n*sink the result into DataStreams or FireHose\n*fully managed\n*auto scaled\n*billed for data goingh through\n*use cases:\n**time series analytics\n**real time metrics\n** real time dashboards <<kinesis>>
+* Ordering
+ * SQS\n*dynamic\n*by Group ID assigned to Message
+ * Kinesis Data Streams\n*static\n*by PartitionKey assigned to Record\n*PartitionKey is mapped to static Shard
+@endmindmap
