@@ -38,7 +38,7 @@ mindmapDiagram {
    * Kinesis Client Library (KCL)\n*at most as many instances as shards\n*1 shard is read by 1 instance\n**4 shards = max 4 KCL instances\n**6 shards = max 6 KCL instances\n*shard reading progress is tracked\nby DynamoDB <<kinesis>>
   * Fire Hose\n*read records from producers like:\n**Data Streams\n**AWS IoT\n**Cloud Watch\n**SKD, KPL, Agent, Client, Application\n*optionally transform them with Lambda\n*write records in batches to:\n**S3\n**Amazon Redshift (data warehouse)\n**Amazon Elastisearch\n**various 3rd party destinations\n**HTTP endpoint\n*pay for data going through FireHose\n*near realtime - processing in batches\n*automatic scaling, fully managed\n*no replay capability <<kinesis>>
   * Analytics\n*source records from DataStreams or Firehose\n*analyze stream of records using SQL\n*sink the result into DataStreams or FireHose\n*fully managed\n*auto scaled\n*billed for data goingh through\n*use cases:\n**time series analytics\n**real time metrics\n** real time dashboards <<kinesis>>
-* Ordering
- * SQS\n*dynamic\n*by Group ID assigned to Message
- * Kinesis Data Streams\n*static\n*by PartitionKey assigned to Record\n*PartitionKey is mapped to static Shard
+ * Ordering
+  * SQS\n*dynamic\n*by Group ID assigned to Message
+  * Kinesis Data Streams\n*static\n*by PartitionKey assigned to Record\n*PartitionKey is mapped to static Shard
 @endmindmap
