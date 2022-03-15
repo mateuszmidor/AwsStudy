@@ -28,6 +28,23 @@ plantuml -tpng *.puml
 | ![19-cloudwatch-xray-cloudtrail](./19-cloudwatch-xray-cloudtrail/xray-write-policy.png) |
 | ------ |
 
+## 21-lambda
+### 00-diagram
+| ![21-lambda](./21-lambda/00-diagram.png) |
+| ------ |
+
+### 01-lambda-at-edge
+| ![21-lambda](./21-lambda/01-lambda-at-edge.png) |
+| ------ |
+
+### 02-streams-mapping
+| ![21-lambda](./21-lambda/02-streams-mapping.png) |
+| ------ |
+
+### 03-sqs-mapping
+| ![21-lambda](./21-lambda/03-sqs-mapping.png) |
+| ------ |
+
 ## 20-sqs-sns-kinesis
 ### 00-diagram
 | ![20-sqs-sns-kinesis](./20-sqs-sns-kinesis/00-diagram.png) |

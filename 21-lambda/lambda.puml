@@ -1,0 +1,35 @@
+@startmindmap 00-diagram
+
+title AWS Serverless
+
+<style>
+mindmapDiagram {
+  .trail {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .xray {
+    BackgroundColor LightSkyBlue
+  }
+  .watch {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>Lambda
+ * Invocation\n*Synchronous - CLI, SDK, API Gateway,\nApplication Load Balancer\n*Asynchronous
+  * Asynchronous Lambda\n*S3, SNS, CloudWatch Events, ...\n*events are placed on internal queue\n*2x retry on error: after 1 and 2 minutes\n*can process message twice - ensure func is idempotent\n*can define Dead Letter Queue for failed reattempts
+   * EventBridge\n*eg. run lambda every minute
+   * S3 notifications\n*eg. run lambda on S3 file upload
+  * Event Source Mapping (Synchronous)\n*records are polled from the source,\nthen lambda is run with event batch\n*sources:\n**Kinesis Data Streams\n**DynamoDB Streams\n**SQS queues
+   * Streams\n*iterator is created for each shard, process items in order\n*processed items are not removed from the stream\n*on error:\n**by default entire batch is reprocessed until success\nor items in batch expire; this can block your processing!\n**can discard old events\n**can limit number of retries\n**can split the batch (workaround for Lambda timeout issue)\n**discarded events can go to Destination
+   * Queues\n*use Long polling with batches 1-10 messages\n*setup DeadLetterQueue with your SQS not with Lambda;\n DLQ works only with async lambda calls and here is sync calls\n*message may be processed twice event when no error,\n so better ensure idempotency\n*processed messages are deleted from the queue
+ * Lambda with Applicatin Load Balancer\n*HTTP request gets to ALB\n*ALB converts HTTP request -> JSON\n*and forwards JSON to EC2 Target Group\n*which returns JSON->HTTP Response->Client\n*Target Group can enable multi-header values\n*conversion of multi-header values:\n**?name=foo&name=bar -> name:[foo, bar]
+ * Lambda@Edge\n*modify CloudFront(CDN) requests&responses
+
+
+@endmindmap
