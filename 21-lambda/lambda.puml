@@ -33,5 +33,7 @@ mindmapDiagram {
  * Destinations\n*to store result/error of async operation somewhere\n*support for SQS, SNS, Lambda, EventBridge bus\n*in case of Lambda - first happen 2 auto retries\n*can be used to replace DeadLetter queue in SQS
  * Execution role\n*allow Lambda function\nto interact with other resource
  * Resource-based policy\n*allow other resource/account\nto run Lambda function
+ * VPC\n*by default Lambda runs in dedicated VPC\n outside your own VPC and sso it  can't\n access your other resources eg. DynamoDB\n*the solution is to deploy Lambda in your VPC
+  * Lambda in your VPC\n*define VPC ID, Subnets and Security Groups\n*Lambda will create Elastic Network Interface\n (ENI) in your subnets\n*needs: AWSLambdaVPCAccessExecutionRole\n*by default, such deployment doesn't give your lambda\n internet access nor public IP\n**even if deployed in Public Subnet!\n*the solution is to use NAT Gateway or NAT Instance\n*to just access other services it's enough to use VPC Endpoints\n*CloudWatch Logs will work ALWAYS no matter what :)
 
 @endmindmap
