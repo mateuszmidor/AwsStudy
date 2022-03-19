@@ -35,5 +35,10 @@ mindmapDiagram {
  * Resource-based policy\n*allow other resource/account\nto run Lambda function
  * VPC\n*by default Lambda runs in dedicated VPC\n outside your own VPC and sso it  can't\n access your other resources eg. DynamoDB\n*the solution is to deploy Lambda in your VPC
   * Lambda in your VPC\n*define VPC ID, Subnets and Security Groups\n*Lambda will create Elastic Network Interface\n (ENI) in your subnets\n*needs: AWSLambdaVPCAccessExecutionRole\n*by default, such deployment doesn't give your lambda\n internet access nor public IP\n**even if deployed in Public Subnet!\n*the solution is to use NAT Gateway or NAT Instance\n*to just access other services it's enough to use VPC Endpoints\n*CloudWatch Logs will work ALWAYS no matter what :)
+ * Lambda performance\n*128MB to 10GB RAM, 1MB increments\n*vCPUs allocated automatically:\n get  s 1vCPU for each requested 1792MB RAM\n*timeout: default 3sec, max 900sec
+  * Execution Context\n*initialized with first Lambda invocation\n*includes /tmp directory - 512 MB storage\n**for permanent storage - use S3\n*preserved across Lambda invocations\n*used to reuse once initialized environment, eg\n database connections, http clients, precomputed data\n*global variables are stored in     Execution Context\n*it is NOT the: ""def lambda_handler(event, **context**):""
+ * Lambda Concurrency\n*max of 1000 concurrent executions across entire account\n*but should set limit for each Function; otherwise other apps\n in the account may get throttled eg. on black friday :) \n*can increase through support ticket
+  * Throttling\n*synchronous invocation - return HTTP 429\n*async invocation - auto-retry, then go to Dead Letter Queue\n eg. S3 event notifications, with exponential backoff
+  * Cold starts & Provisioned concurrency\n*cold start = first user needs to wait for execution context init\n*provisioned concurrency = pool of initialized contexts
 
 @endmindmap
