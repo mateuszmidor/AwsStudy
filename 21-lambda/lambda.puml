@@ -40,5 +40,5 @@ mindmapDiagram {
  * Lambda Concurrency\n*max of 1000 concurrent executions across entire account\n*but should set limit for each Function; otherwise other apps\n in the account may get throttled eg. on black friday :) \n*can increase through support ticket
   * Throttling\n*synchronous invocation - return HTTP 429\n*async invocation - auto-retry, then go to Dead Letter Queue\n eg. S3 event notifications, with exponential backoff
   * Cold starts & Provisioned concurrency\n*cold start = first user needs to wait for execution context init\n*provisioned concurrency = pool of initialized contexts
-
+ * Lambda dependencies\n*need to ZIP dependencies folder together with function code:\n**pip --target\n**go mod vendor\n*upload ZIP to Lambda if less than 50MB,\n otherwise to S3 first and then reference them from Lambda
 @endmindmap
