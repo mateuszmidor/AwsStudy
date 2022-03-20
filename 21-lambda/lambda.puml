@@ -41,4 +41,8 @@ mindmapDiagram {
   * Throttling\n*synchronous invocation - return HTTP 429\n*async invocation - auto-retry, then go to Dead Letter Queue\n eg. S3 event notifications, with exponential backoff
   * Cold starts & Provisioned concurrency\n*cold start = first user needs to wait for execution context init\n*provisioned concurrency = pool of initialized contexts
  * Lambda dependencies\n*need to ZIP dependencies folder together with function code:\n**pip --target\n**go mod vendor\n*upload ZIP to Lambda if less than 50MB,\n otherwise to S3 first and then reference them from Lambda
+ * Lambda over CloudFormation\n*it is possible create Lambda using CloudFormation
+  * inline - as embedded code in CloudFormation config file,\n can't include dependencies this way
+  * using S3 - reference S3 ZIP from CloudFormation,\n use ObjectVersioning so CloudFormation automatically\n detects and deploys the change! 
+ * Lambda Layers\n*create custom runtimes, eg C++, Rust\n*externalize dependencies to reuse them and avoid\n packaging heavy dependencies along with code
 @endmindmap
