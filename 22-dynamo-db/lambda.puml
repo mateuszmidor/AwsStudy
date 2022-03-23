@@ -1,0 +1,31 @@
+@startmindmap 00-diagram
+
+title DynamoDB
+
+<style>
+mindmapDiagram {
+  .trail {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .xray {
+    BackgroundColor LightSkyBlue
+  }
+  .watch {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>DynamoDB
+ * read/write capacity modes:\n*provisioned(default)\n** manually specify reads/writes per second\n**plan beforehand\n**pay for what you provisioned\n*on-demand mode\n**scales up/down automatically\n**no capacity planning needed\n**pay for what you used, but more than in provisioned mode\n*can change mode once pe 24 hours
+  * Provisioned\n*table must have provisioned read and write capacity units\n*can setup auto-scaling\n*capacity can be exceeded temporarily using BurstCapacity\n**once BurstCapacity is consumed, you get:\n    "ProvisionedThroughputExceededException"
+   * Write Capacity Units(WCU) - throughput for Write\n*1WCU = 1KB/s\n*4KB/s = 4WCU\n*4.5KB/s=5WCU (rounded up to 1KB!!!)
+   * Read Capacity Units(RCU) - throughput for Read\n*Eventually Consistent Read(default) -\n immediate read after write can return stale data\n*Strongly Consistent Read - always fresh data\n**but consumes RCU x2 !!!\n*1RCU = 1 strongly consistent 4KB read/s\n*16KB/s strongly consistent = 4RCU\n*17KB/s strongly consistent = 5RCU(rounded up to 4KB!!!)\n*16KB/s eventually consistent = 2RCU
+  * On-demand\n*no planning\n*no throttling, unlimited RCU and WCU\n*2.5x more expensive than provisioned mode
+ * Partitions\n*data is stored on partitions\n*partitions live on specific servers\n*destination partition is based on hash of Partition Key
+ * Throttling\n*if we exceed provisioned WCU or RCU,\n we get "ProvisionedThroughputExceededException"\n*reasons:\n**hot keys - one partition is selected more often that others\n**hot partition\n**very large items - RCU and WCU consumption depend on size!\n*solutions:\n**exponential backoff (handled by SDK)\n**better partition keys distribution - choose better keys\n**if RCU issue - DynamoDB Accelerator (DAX) may help
+@endmindmap
