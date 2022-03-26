@@ -34,4 +34,10 @@ mindmapDiagram {
    * Query\n*KeyConditionExpression\n**required PartitionKey(=)\n** optional SortKey(>, >=, <, <=, Between, Begins with)\n*FilterExpression - filtering after Query operation;\n      accepts only attributes other than Hash and Range\n*Query returns number of items specified in "Limit" or up to 1MB of data\n*Query can paginate data
   * Delete\n*DeleteItem - can delete items conditionally\n*DeleteTable - much faster than deleting items one by one
   * Batch operations\n*BatchWriteItem\n**up to 25 PutItem/DeleteItem in one call\n**up to 16MB/400KB per item in one call\n**can't update items\n*BatchGetItem\n**read from one or more tables\n**1oo items or 16MB of data
+ * Indexes
+  * LocalSecondaryIndex (LSI)\n*works as Alternative Sort Key for the table\n*table can have up to 5 LocalSecondaryIndexes\n*defined at table creation
+  * GlobalSecondaryIndex (GSI)\n*makes an Alternative Primary Key (Hash+Range)\n*you must provision RCUs and WCUs for the index\n*can be added/modified after table creation\n*speeds-up queries on non-key attributes
+  * Throttling\n*GSI\n**if writes are throttled on GSI, they will be throttled on main table AS WELL!\n**even if WCUs on main table are fine\n**so assign WCUs for GSI carefully\n*LSI\n**uses RCUs and WCUs of main table\n**no special throttling considerations
+  * Attribute projection\n*index works as a table of it's own\n*need to specify, which attributes of the origin table to expose\n*can expose: keys, selected attributes, all attributes
+ * Optimistic locking\n*achieved using Conditional Writes feature + version number attribute\n*you need to define the "version" attribute yourself
 @endmindmap
