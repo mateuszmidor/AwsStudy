@@ -4,45 +4,60 @@ title AWS Serverless
 
 <style>
 mindmapDiagram {
-  .trail {
+  .vpc {
     BackgroundColor Pink
   }
   .orange {
     BackgroundColor orange
   }
-  .xray {
+  .invocation {
     BackgroundColor LightSkyBlue
   }
-  .watch {
+  .performance {
     BackgroundColor LightGreen
+  }
+  .concurrency {
+    BackgroundColor LightSalmon
+  }
+  .cf {
+    BackgroundColor LightSteelBlue
+  }
+  .versions {
+    BackgroundColor LightSeaGreen
   }
 }
 </style>
 
 
 *[#Orange] <b>Lambda
- * Invocation\n*Synchronous - CLI, SDK, API Gateway,\nApplication Load Balancer\n*Asynchronous
-  * Asynchronous Lambda\n*S3, SNS, CloudWatch Events, ...\n*events are placed on internal queue\n*2x retry on error: after 1 and 2 minutes\n*can process message twice - ensure func is idempotent\n*can define Dead Letter Queue for failed reattempts
-   * EventBridge\n*eg. run lambda every minute
-   * S3 notifications\n*eg. run lambda on S3 file upload
-  * Event Source Mapping (Synchronous)\n*records are POLLED from the source,\nthen lambda is run with event batch\n*lambda needs permission\nto read the event data from source\n*event sources:\n**Kinesis Data Streams\n**DynamoDB Streams\n**SQS queues
-   * Streams\n*iterator is created for each shard, process items in order\n*processed items are not removed from the stream\n*on error:\n**by default entire batch is reprocessed until success\nor items in batch expire; this can block your processing!\n**can discard old events\n**can limit number of retries\n**can split the batch (workaround for Lambda timeout issue)\n**discarded events can go to Destination
-   * Queues\n*use Long polling with batches 1-10 messages\n*setup DeadLetterQueue with your SQS, not with Lambda;\n DLQ works only with async lambda calls and here is sync calls\n*message may be processed twice event when no error,\n so better ensure idempotency\n*processed messages are deleted from the queue
+ * Invocation\n*Synchronous - CLI, SDK, API Gateway,\nApplication Load Balancer\n*Asynchronous <<invocation>>
+  * Asynchronous Lambda\n*S3, SNS, CloudWatch Events, ...\n*events are placed on internal queue\n*2x retry on error: after 1 and 2 minutes\n*can process message twice - ensure func is idempotent\n*can define Dead Letter Queue for failed reattempts <<invocation>>
+   * EventBridge\n*eg. run lambda every minute <<invocation>>
+   * S3 notifications\n*eg. run lambda on S3 file upload <<invocation>>
+  * Event Source Mapping (Synchronous)\n*records are POLLED from the source,\nthen lambda is run with event batch\n*lambda needs permission\nto read the event data from source\n*event sources:\n**Kinesis Data Streams\n**DynamoDB Streams\n**SQS queues <<invocation>>
+   * Streams\n*iterator is created for each shard, process items in order\n*processed items are not removed from the stream\n*on error:\n**by default entire batch is reprocessed until success\nor items in batch expire; this can block your processing!\n**can discard old events\n**can limit number of retries\n**can split the batch (workaround for Lambda timeout issue)\n**discarded events can go to Destination <<invocation>>
+   * Queues\n*use Long polling with batches 1-10 messages\n*setup DeadLetterQueue with your SQS, not with Lambda;\n DLQ works only with async lambda calls and here is sync calls\n*message may be processed twice event when no error,\n so better ensure idempotency\n*processed messages are deleted from the queue <<invocation>>
  * Lambda with Applicatin Load Balancer\n*HTTP request gets to ALB\n*ALB converts HTTP request -> JSON\n*and forwards JSON to EC2 Target Group\n*which returns JSON->HTTP Response->Client\n*Target Group can enable multi-header values\n*conversion of multi-header values:\n**?name=foo&name=bar -> name:[foo, bar]
  * Lambda@Edge\n*modify CloudFront(CDN) requests&responses
  * Destinations\n*to store result/error of async operation somewhere\n*support for SQS, SNS, Lambda, EventBridge bus\n*in case of Lambda - first happen 2 auto retries\n*can be used to replace DeadLetter queue in SQS
  * Execution role\n*allow Lambda function\nto interact with other resource
- * Resource-based policy\n*allow other resource/account\nto run Lambda function
- * VPC\n*by default Lambda runs in dedicated VPC\n outside your own VPC and sso it  can't\n access your other resources eg. DynamoDB\n*the solution is to deploy Lambda in your VPC
-  * Lambda in your VPC\n*define VPC ID, Subnets and Security Groups\n*Lambda will create Elastic Network Interface\n (ENI) in your subnets\n*needs: AWSLambdaVPCAccessExecutionRole\n*by default, such deployment doesn't give your lambda\n internet access nor public IP\n**even if deployed in Public Subnet!\n*the solution is to use NAT Gateway or NAT Instance\n*to just access other services it's enough to use VPC Endpoints\n*CloudWatch Logs will work ALWAYS no matter what :)
- * Lambda performance\n*128MB to 10GB RAM, 1MB increments\n*vCPUs allocated automatically:\n get  s 1vCPU for each requested 1792MB RAM\n*timeout: default 3sec, max 900sec
-  * Execution Context\n*initialized with first Lambda invocation\n*includes /tmp directory - 512 MB storage\n**for permanent storage - use S3\n*preserved across Lambda invocations\n*used to reuse once initialized environment, eg\n database connections, http clients, precomputed data\n*global variables are stored in     Execution Context\n*it is NOT the: ""def lambda_handler(event, **context**):""
- * Lambda Concurrency\n*max of 1000 concurrent executions across entire account\n*but should set limit for each Function; otherwise other apps\n in the account may get throttled eg. on black friday :) \n*can increase through support ticket
-  * Throttling\n*synchronous invocation - return HTTP 429\n*async invocation - auto-retry, then go to Dead Letter Queue\n eg. S3 event notifications, with exponential backoff
-  * Cold starts & Provisioned concurrency\n*cold start = first user needs to wait for execution context init\n*provisioned concurrency = pool of initialized contexts
+ * Resource-based policy\n*allow other resource/account\nto run Lambda function 
+ * VPC\n*by default Lambda runs in dedicated VPC\n outside your own VPC and sso it  can't\n access your other resources eg. DynamoDB\n*the solution is to deploy Lambda in your VPC <<vpc>>
+  * Lambda in your VPC\n*define VPC ID, Subnets and Security Groups\n*Lambda will create Elastic Network Interface\n (ENI) in your subnets\n*needs: AWSLambdaVPCAccessExecutionRole\n*by default, such deployment doesn't give your lambda\n internet access nor public IP\n**even if deployed in Public Subnet!\n*the solution is to use NAT Gateway or NAT Instance\n*to just access other services it's enough to use VPC Endpoints\n*CloudWatch Logs will work ALWAYS no matter what :) <<vpc>>
+ * Lambda performance\n*128MB to 10GB RAM, 1MB increments\n*vCPUs allocated automatically:\n get  s 1vCPU for each requested 1792MB RAM\n*timeout: default 3sec, max 900sec <<performance>>
+  * Execution Context\n*initialized with first Lambda invocation\n*includes /tmp directory - 512 MB storage\n**for permanent storage - use S3\n*preserved across Lambda invocations\n*used to reuse once initialized environment, eg\n database connections, http clients, precomputed data\n*global variables are stored in     Execution Context\n*it is NOT the: ""def lambda_handler(event, **context**):"" <<performance>>
+ * Lambda Concurrency\n*max of 1000 concurrent executions across entire account\n*but should set limit for each Function; otherwise other apps\n in the account may get throttled eg. on black friday :) \n*can increase through support ticket <<concurrency>>
+  * Throttling\n*synchronous invocation - return HTTP 429\n*async invocation - auto-retry, then go to Dead Letter Queue\n eg. S3 event notifications, with exponential backoff <<concurrency>>
+  * Cold starts & Provisioned concurrency\n*cold start = first user needs to wait for execution context init\n*provisioned concurrency = pool of initialized contexts <<concurrency>>
  * Lambda dependencies\n*need to ZIP dependencies folder together with function code:\n**pip --target\n**go mod vendor\n*upload ZIP to Lambda if less than 50MB,\n otherwise to S3 first and then reference them from Lambda
- * Lambda over CloudFormation\n*it is possible create Lambda using CloudFormation
-  * inline - as embedded code in CloudFormation config file,\n can't include dependencies this way
-  * using S3 - reference S3 ZIP from CloudFormation,\n use ObjectVersioning so CloudFormation automatically\n detects and deploys the change! 
+ * Lambda over CloudFormation\n*it is possible create Lambda using CloudFormation <<cf>>
+  * inline - as embedded code in CloudFormation config file,\n can't include dependencies this way <<cf>>
+  * using S3 - reference S3 ZIP from CloudFormation,\n use ObjectVersioning so CloudFormation automatically\n detects and deploys the change!  <<cf>>
  * Lambda Layers\n*create custom runtimes, eg C++, Rust\n*externalize dependencies to reuse them and avoid\n packaging heavy dependencies along with code
+ * Lambda Containers\n*Lambda can run container up to 10GB from ECR\n*pack large and complex dependencies into container\n*base images available for Python, Node, Go, Java, Ruby\n*can build custom image implementing Lambda Runtime\n*test containers using Lambda Runtime Interface Emulator\n*can be alternative to Lambda Layers
+ * Lambda versions and aliases <<versions>>
+  * Versions\n*each Deploy creates new, immutable version\n*version = code + configuration<<versions>>
+  * Aliases\n*alias is pointer to specific Lambda version\n*eg. "$Latest"\n*aliases enable Blue\Green deployments\n by routing X% of traffic to given aliases\n*alias gets it's own ARN\n*alias can't reference other alias<<versions>>
+ * Lambda and CodeDeploy\n*CodeDeploy can upgrade lambdato new version\n*it will smoothly route traffic from old to new version unttil 100% is reached
+ * Lambda limits\n*limits are per-region\n*RAM: configurable 128MB - 10GB, more memory-more vcpus\n*max execution time: 15minutes\n*environment variables: total of 4KB data\n*/tmp folder: 512MB (part of execution environment)\n*concurrent executions: 1000\n*max compressed deployment ZIP: 50MB\n*max uncompressed deployment: 250MB
 @endmindmap
