@@ -20,7 +20,11 @@ mindmapDiagram {
 </style>
 
 
-*[#Orange] <b>DynamoDB
+*[#Orange] <b>DynamoDB\nServerless
+ * NoSQL Databases:\n*no tables\n*distributed\n*very limited suppport for "joins"\n*no aggregation like sum, avg\n*all needed data is present in one row\n*scale horizontally well
+ * DynamoDB\n*made of Tables\n*table has PrimaryKey\n*table has rows (aka items)\n*item has attributes (like columns, but can be nested)\n*item can be max 400KB of data
+  * supported data types:\n*ScalarTypes - String, Number, Binary, Boolean, Null\n*DocumentTypes - List, Map (enables nesting)\n*SetTypes - StringSet, NumberSet, BinarySet
+  * PrimaryKeys\n*Option1 - PartitionKey(hash)\n**unique for each item\n**diverse enough for the data to be evenly ditributed\n*Option2 - PartitionKey + SortKey(hash + range)\n**combination must be unique for each item\n**data is grouped by PartitionKey
  * read/write capacity modes:\n*provisioned(default)\n** manually specify reads/writes per second\n**plan beforehand\n**pay for what you provisioned\n*on-demand mode\n**scales up/down automatically\n**no capacity planning needed\n**pay for what you used, but more than in provisioned mode\n*can change mode once pe 24 hours
   * Provisioned\n*table must have provisioned read and write capacity units\n*can setup auto-scaling\n*capacity can be exceeded temporarily using BurstCapacity\n**once BurstCapacity is consumed, you get:\n    "ProvisionedThroughputExceededException"
    * Write Capacity Units(WCU) - throughput for Write\n*1WCU = 1KB/s\n*4KB/s = 4WCU\n*4.5KB/s=5WCU (rounded up to 1KB!!!)
@@ -45,4 +49,4 @@ mindmapDiagram {
  * DynamoDB Streams\n*stream is a sequence of item-level modifications(create/update/delete)\n*can be:\n**sent to Kinesis Data Streams\n**read by Lambda\n**read by Kinesis Client Library\n*data retention is 24h\n*use cases:\n**react to changes in real time (send welcome email to user)\n**analytics\n**insert into derivative tables\n**insert into ElastiSearch\n**implement cross-region replication\n*streams are made of AWS auto-provisioned shards\n*after enabling stream, only new changes will be inserted into it
   * Information inserted into stream:\n*KEYS_ONLY - only key attributes\n*NEW_IMAGE - copy of the new item\n*OLD_IMAGE - copy of the old item\n*NEW_AND_OLD_IMAGE - both copies
   * Streams-Lambda cooperations\n*need to define Event Source Mapping to read from DynamoDB Streams\n*Lambda needs appropriate permissions\n*Lambda will be invoked synchronously
-@endmindmap
+ @endmindmap
