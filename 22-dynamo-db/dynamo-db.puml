@@ -49,4 +49,6 @@ mindmapDiagram {
  * DynamoDB Streams\n*stream is a sequence of item-level modifications(create/update/delete)\n*can be:\n**sent to Kinesis Data Streams\n**read by Lambda\n**read by Kinesis Client Library\n*data retention is 24h\n*use cases:\n**react to changes in real time (send welcome email to user)\n**analytics\n**insert into derivative tables\n**insert into ElastiSearch\n**implement cross-region replication\n*streams are made of AWS auto-provisioned shards\n*after enabling stream, only new changes will be inserted into it
   * Information inserted into stream:\n*KEYS_ONLY - only key attributes\n*NEW_IMAGE - copy of the new item\n*OLD_IMAGE - copy of the old item\n*NEW_AND_OLD_IMAGE - both copies
   * Streams-Lambda cooperations\n*need to define Event Source Mapping to read from DynamoDB Streams\n*Lambda needs appropriate permissions\n*Lambda will be invoked synchronously
+ * Time To Live (TTL)\n*automatically delete item after "expire_on" timestamp (Unix epoch)\n*doesn't consume any\n*deletion within 48h after expiration\n*expired items are also deleted from indexes (Local and Global SecondaryIndex)
+
  @endmindmap
