@@ -4,51 +4,69 @@ title DynamoDB
 
 <style>
 mindmapDiagram {
-  .trail {
+  .dynamo {
     BackgroundColor Pink
   }
   .orange {
     BackgroundColor orange
   }
-  .xray {
+  .capacity {
     BackgroundColor LightSkyBlue
   }
-  .watch {
+  .api {
     BackgroundColor LightGreen
   }
+  .indexes {
+    BackgroundColor LightPink
+  }
+  .dax {
+    BackgroundColor LightSeaGreen
+  } 
+  .transactions {
+    BackgroundColor LightSteelBlue
+  } 
+  .streams {
+    BackgroundColor LightSalmon
+  } 
 }
 </style>
 
 
 *[#Orange] <b>DynamoDB\nServerless
  * NoSQL Databases:\n*no tables\n*distributed\n*very limited suppport for "joins"\n*no aggregation like sum, avg\n*all needed data is present in one row\n*scale horizontally well
- * DynamoDB\n*made of Tables\n*table has PrimaryKey\n*table has rows (aka items)\n*item has attributes (like columns, but can be nested)\n*item can be max 400KB of data
-  * supported data types:\n*ScalarTypes - String, Number, Binary, Boolean, Null\n*DocumentTypes - List, Map (enables nesting)\n*SetTypes - StringSet, NumberSet, BinarySet
-  * PrimaryKeys\n*Option1 - PartitionKey(hash)\n**unique for each item\n**diverse enough for the data to be evenly ditributed\n*Option2 - PartitionKey + SortKey(hash + range)\n**combination must be unique for each item\n**data is grouped by PartitionKey
- * read/write capacity modes:\n*provisioned(default)\n** manually specify reads/writes per second\n**plan beforehand\n**pay for what you provisioned\n*on-demand mode\n**scales up/down automatically\n**no capacity planning needed\n**pay for what you used, but more than in provisioned mode\n*can change mode once pe 24 hours
-  * Provisioned\n*table must have provisioned read and write capacity units\n*can setup auto-scaling\n*capacity can be exceeded temporarily using BurstCapacity\n**once BurstCapacity is consumed, you get:\n    "ProvisionedThroughputExceededException"
-   * Write Capacity Units(WCU) - throughput for Write\n*1WCU = 1KB/s\n*4KB/s = 4WCU\n*4.5KB/s=5WCU (rounded up to 1KB!!!)
-   * Read Capacity Units(RCU) - throughput for Read\n*Eventually Consistent Read(default) -\n immediate read after write can return stale data\n*Strongly Consistent Read - always fresh data\n**but consumes RCU x2 !!!\n*1RCU = 1 strongly consistent 4KB read/s\n*16KB/s strongly consistent = 4RCU\n*17KB/s strongly consistent = 5RCU(rounded up to 4KB!!!)\n*16KB/s eventually consistent = 2RCU
-  * On-demand\n*no planning\n*no throttling, unlimited RCU and WCU\n*2.5x more expensive than provisioned mode
+ * DynamoDB\n*made of Tables\n*table has PrimaryKey\n*table has rows (aka items)\n*item has attributes (like columns, but can be nested)\n*item can be max 400KB of data <<dynamo>>
+  * supported data types:\n*ScalarTypes - String, Number, Binary, Boolean, Null\n*DocumentTypes - List, Map (enables nesting)\n*SetTypes - StringSet, NumberSet, BinarySet <<dynamo>>
+  * PrimaryKeys\n*Option1 - PartitionKey(hash)\n**unique for each item\n**diverse enough for the data to be evenly ditributed\n*Option2 - PartitionKey + SortKey(hash + range)\n**combination must be unique for each item\n**data is grouped by PartitionKey  <<dynamo>>
+ * read/write capacity modes:\n*provisioned(default)\n** manually specify reads/writes per second\n**plan beforehand\n**pay for what you provisioned\n*on-demand mode\n**scales up/down automatically\n**no capacity planning needed\n**pay for what you used, but more than in provisioned mode\n*can change mode once pe 24 hours <<capacity>>
+  * Provisioned\n*table must have provisioned read and write capacity units\n*can setup auto-scaling\n*capacity can be exceeded temporarily using BurstCapacity\n**once BurstCapacity is consumed, you get:\n    "ProvisionedThroughputExceededException" <<capacity>>
+   * Write Capacity Units(WCU) - throughput for Write\n*1WCU = 1KB/s\n*4KB/s = 4WCU\n*4.5KB/s=5WCU (rounded up to 1KB!!!) <<capacity>>
+   * Read Capacity Units(RCU) - throughput for Read\n*Eventually Consistent Read(default) -\n immediate read after write can return stale data\n*Strongly Consistent Read - always fresh data\n**but consumes RCU x2 !!!\n*1RCU = 1 strongly consistent 4KB read/s\n*16KB/s strongly consistent = 4RCU\n*17KB/s strongly consistent = 5RCU(rounded up to 4KB!!!)\n*16KB/s eventually consistent = 2RCU <<capacity>>
+  * On-demand\n*no planning\n*no throttling, unlimited RCU and WCU\n*2.5x more expensive than provisioned mode <<capacity>>
  * Partitions\n*data is stored on partitions\n*partitions live on specific servers\n*destination partition is based on hash of Partition Key
  * Throttling\n*if we exceed provisioned WCU or RCU,\n we get "ProvisionedThroughputExceededException"\n*reasons:\n**hot keys - one partition is selected more often that others\n**hot partition\n**very large items - RCU and WCU consumption depend on size!\n*solutions:\n**exponential backoff (handled by SDK)\n**better partition keys distribution - choose better keys\n**if RCU issue - DynamoDB Accelerator (DAX) may help
- * API
-  * Write\n*PutItem-create or replace row with same PrimaryKey, consume WCUs\n*UpdateItem-create or replace item's attributes, used for Atomic Counters\n*ConditionalWrites-accept write/update/delete if conditions are met
-  * Read\n*GetItem-read based on PrimaryKey - Hash or Hash+Range\n**Eventually Consistent by default, option to enable Strong Consistency\n**ProjectedExpression - only read some attributes of the item\n*Query - read many items (rows) of given PartitionKey\n*Scan\n**read entire table and filter data on client side (inefficient)\n**by reading entire table - consumes a lot of RCUs\n**can reduce the number of items using "Limit"\n**returns up to 1MB of data\n**for more data - use pagination\n**can be used with ProjectionExpressions and FilterExpressions\n*ParallelScan - faster than just Scan
-   * Query\n*KeyConditionExpression\n**required PartitionKey(=)\n** optional SortKey(>, >=, <, <=, Between, Begins with)\n*FilterExpression - filtering after Query operation;\n      accepts only attributes other than Hash and Range\n*Query returns number of items specified in "Limit" or up to 1MB of data\n*Query can paginate data
-  * Delete\n*DeleteItem - can delete items conditionally\n*DeleteTable - much faster than deleting items one by one
-  * Batch operations\n*BatchWriteItem\n**up to 25 PutItem/DeleteItem in one call\n**up to 16MB/400KB per item in one call\n**can't update items\n*BatchGetItem\n**read from one or more tables\n**1oo items or 16MB of data
- * Indexes
-  * LocalSecondaryIndex (LSI)\n*works as Alternative Sort Key for the table\n*table can have up to 5 LocalSecondaryIndexes\n*defined at table creation
-  * GlobalSecondaryIndex (GSI)\n*makes an Alternative Primary Key (Hash+Range)\n*you must provision RCUs and WCUs for the index\n*can be added/modified after table creation\n*speeds-up queries on non-key attributes
-  * Throttling\n*GSI\n**if writes are throttled on GSI, they will be throttled on main table AS WELL!\n**even if WCUs on main table are fine\n**so assign WCUs for GSI carefully\n*LSI\n**uses RCUs and WCUs of main table\n**no special throttling considerations
-  * Attribute projection\n*index works as a table of it's own\n*need to specify, which attributes of the origin table to expose\n*can expose: keys, selected attributes, all attributes
+ * API <<api>>
+  * Write\n*PutItem-create or replace row with same PrimaryKey, consume WCUs\n*UpdateItem-create or replace item's attributes, used for Atomic Counters\n*ConditionalWrites-accept write/update/delete if conditions are met  <<api>>
+  * Read\n*GetItem-read based on PrimaryKey - Hash or Hash+Range\n**Eventually Consistent by default, option to enable Strong Consistency\n**ProjectedExpression - only read some attributes of the item\n*Query - read many items (rows) of given PartitionKey\n*Scan\n**read entire table and filter data on client side (inefficient)\n**by reading entire table - consumes a lot of RCUs\n**can reduce the number of items using "Limit"\n**returns up to 1MB of data\n**for more data - use pagination\n**can be used with ProjectionExpressions and FilterExpressions\n*ParallelScan - faster than just Scan  <<api>>
+   * Query\n*KeyConditionExpression\n**required PartitionKey(=)\n** optional SortKey(>, >=, <, <=, Between, Begins with)\n*FilterExpression - filtering after Query operation;\n      accepts only attributes other than Hash and Range\n*Query returns number of items specified in "Limit" or up to 1MB of data\n*Query can paginate data  <<api>>
+  * Delete\n*DeleteItem - can delete items conditionally\n*DeleteTable - much faster than deleting items one by one <<api>>
+  * Batch operations\n*BatchWriteItem\n**up to 25 PutItem/DeleteItem in one call\n**up to 16MB/400KB per item in one call\n**can't update items\n*BatchGetItem\n**read from one or more tables\n**1oo items or 16MB of data <<api>>
+ * Indexes <<indexes>>
+  * LocalSecondaryIndex (LSI)\n*works as Alternative Sort Key for the table\n*table can have up to 5 LocalSecondaryIndexes\n*defined at table creation <<indexes>>
+  * GlobalSecondaryIndex (GSI)\n*makes an Alternative Primary Key (Hash+Range)\n*you must provision RCUs and WCUs for the index\n*can be added/modified after table creation\n*speeds-up queries on non-key attributes <<indexes>>
+  * Throttling\n*GSI\n**if writes are throttled on GSI, they will be throttled on main table AS WELL!\n**even if WCUs on main table are fine\n**so assign WCUs for GSI carefully\n*LSI\n**uses RCUs and WCUs of main table\n**no special throttling considerations <<indexes>>
+  * Attribute projection\n*index works as a table of it's own\n*need to specify, which attributes of the origin table to expose\n*can expose: keys, selected attributes, all attributes <<indexes>>
  * Optimistic locking\n*achieved using Conditional Writes feature + version number attribute\n*you need to define the "version" attribute yourself
- * DynamoDB Accelerator - DAX\n*fully managed, highly available in-memory cache for DynamoDB\n*microseconds latency for reads and queries\n*requires just enabling it\n*solves "Hot Key" problem - reading same item too frequently\n that ends up with Read Capacity Units throtting\n*default TTL is 5 minutes\n*DAX is made of up to 11 nodes\n*multi-AZ is advised, at least 3 nodes for production
-  * DAX vs ElastiCache\n*DAX for caching individual objects, queries & scans(low-level cache)\n*ElastiCache for caching application logic resutls & aggergation results (high-level cache)
- * DynamoDB Streams\n*stream is a sequence of item-level modifications(create/update/delete)\n*can be:\n**sent to Kinesis Data Streams\n**read by Lambda\n**read by Kinesis Client Library\n*data retention is 24h\n*use cases:\n**react to changes in real time (send welcome email to user)\n**analytics\n**insert into derivative tables\n**insert into ElastiSearch\n**implement cross-region replication\n*streams are made of AWS auto-provisioned shards\n*after enabling stream, only new changes will be inserted into it
-  * Information inserted into stream:\n*KEYS_ONLY - only key attributes\n*NEW_IMAGE - copy of the new item\n*OLD_IMAGE - copy of the old item\n*NEW_AND_OLD_IMAGE - both copies
-  * Streams-Lambda cooperations\n*need to define Event Source Mapping to read from DynamoDB Streams\n*Lambda needs appropriate permissions\n*Lambda will be invoked synchronously
- * Time To Live (TTL)\n*automatically delete item after "expire_on" timestamp (Unix epoch)\n*doesn't consume any\n*deletion within 48h after expiration\n*expired items are also deleted from indexes (Local and Global SecondaryIndex)
-
+ * DynamoDB Accelerator - DAX\n*fully managed, highly available in-memory cache for DynamoDB\n*microseconds latency for reads and queries\n*requires just enabling it\n*solves "Hot Key" problem - reading same item too frequently\n that ends up with Read Capacity Units throtting\n*default TTL is 5 minutes\n*DAX is made of up to 11 nodes\n*multi-AZ is advised, at least 3 nodes for production <<dax>>
+  * DAX vs ElastiCache\n*DAX for caching individual objects, queries & scans(low-level cache)\n*ElastiCache for caching application logic resutls & aggergation results (high-level cache) <<dax>>
+ * DynamoDB Streams\n*stream is a sequence of item-level modifications(create/update/delete)\n*can be:\n**sent to Kinesis Data Streams\n**read by Lambda\n**read by Kinesis Client Library\n*data retention is 24h\n*use cases:\n**react to changes in real time (send welcome email to user)\n**analytics\n**insert into derivative tables\n**insert into ElastiSearch\n**implement cross-region replication\n*streams are made of AWS auto-provisioned shards\n*after enabling stream, only new changes will be inserted into it <<streams>>
+  * Information inserted into stream:\n*KEYS_ONLY - only key attributes\n*NEW_IMAGE - copy of the new item\n*OLD_IMAGE - copy of the old item\n*NEW_AND_OLD_IMAGE - both copies <<streams>>
+  * Streams-Lambda cooperations\n*need to define Event Source Mapping to read from DynamoDB Streams\n*Lambda needs appropriate permissions\n*Lambda will be invoked synchronously <<streams>>
+ * Time To Live (TTL)\n*automatically delete item after "expire_on" timestamp (Unix epoch)\n*"expire_on" attribute must be added manually and set as TTL source\n*doesn't consume any\n*deletion within 48h after expiration\n*expired items are also deleted from indexes (Local and Global SecondaryIndex)
+ * DynamoDB CLI\n*--projection-expression - retrieve just a subset of attributes, not all of them\n*--filter-expression - filter items before returning to you\n*general AWS CLI pagination options(DynamoDB, S3, ...)\n**--page-size - retrieve all items but in batches to avoid timeout (default: 1000 items/batch)\n**--max-items - retrieve only this number of items + "NextToken" - \n     used as param with --starting-token if you want later retrieve follow up items
+ * Transactions\n*all-or-nothing operations across multiple items/tables\n*Atomicity, Consistency, Integrity, Durability\n*ReadModes: Eventual Consistency, Strong Consistency, Transactional\n**read data from all selected tables and get consistent view\n*WriteModes: Standard, Transactional\n**update data in all tables or none\n*consumes 2x more WCUs and RCUs than Strongly Consistent operation <<transactions>>
+  * Transactional operations\n*up to 25 unique items or up to 4MB data\n*TransactGetItems - one or more GetItem operations\n*TransactWriteItems - one or more Put/Update/Delete item operations <<transactions>>
+  * Capacity computations\n* <<transactions>>
+ * Session Cache\n*DynamoDB can be easily used for session state storage\n*vs ElastiCache\n**ElastiCache is in-memory, DynamoDB is serverless\n**both are key-value stores\n*vs EFS\n**EFS must be attached to EC2 as network drive, can't work with lambda\n*vs EBS & Instance Store\n**can only be used for local cashing and not for shared caching\n*vs S3\n**S3 is much higher latency and designed for large objects, poor choice
+ * Large Objects\n*DynamoDB can store up to 400KB per item\n*for larger data - store URLs to objects stored in S3\n*can employ lambda triggered by S3 upload event to add item in DynamoDB
+ * DynamoDB operations\n*Table Cleanup\n**scan + delete - slow, expensive in RCUs and WCUs\n**drop table + create table - fast, cheap\n*Copy the table (eg. to another region)\n**AWS Data Pipeline - copy over S3 bucket\n**backup and restore into new table\n**scan + PutItem/BatchWriteItem - needs writing some code
  @endmindmap
