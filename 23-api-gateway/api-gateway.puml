@@ -1,0 +1,28 @@
+@startmindmap 00-diagram
+
+title API Gateway
+
+<style>
+mindmapDiagram {
+  .trail {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .xray {
+    BackgroundColor LightSkyBlue
+  }
+  .watch {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>API Gateway
+ * Integrations\n*call Lambda function\n**expose REAT api backed by Lambda\n*expose HTTP endpoint of the backend\n**add authorization, caching, rate limiting, ...\n*expose any AWS service\n**if it appears beneficial
+ * Endpoint types\n*Edge-optimized - for global clients anywhere in the world, uses CloudFront\n*Regional - for clients ina single region, optionally uses CloudFront\n*Private - can only be accessed from VPC using interface VPC endpoint (ENI)
+ * Stages\n*changes to API Gateway are not effective immediately\n*they must be deployed to stages, eg. v1,v2,v3, dev, test, prod\n*stages hold change history and can be rolled back
+  * Stage variables\n*like env variables but associated with stages\n*accessible from Lambda inside "context"\n*can also be used in:\n**Lambda function ARN\n**Lambda Aliases\n**HTTP endpoint\n**Parameter mapping templates\n*example of API Gateway target lambda using stage variables:\n**lambda-api-gateway-proxy-root-get:${stageVariables.lambdaAlias}\n**here stageVariables is built-in name, lambdaAlias is custom variable
+ @endmindmap
