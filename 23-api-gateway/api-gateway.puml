@@ -26,4 +26,9 @@ mindmapDiagram {
  * Stages\n*changes to API Gateway are not effective immediately\n*they must be deployed to stages, eg. v1,v2,v3, dev, test, prod\n*stages hold change history and can be rolled back
   * Stage variables\n*like env variables but associated with stages\n*accessible from Lambda inside "context"\n*can also be used in:\n**Lambda function ARN\n**Lambda Aliases\n**HTTP endpoint\n**Parameter mapping templates\n*example of API Gateway target lambda using stage variables:\n**lambda-api-gateway-proxy-root-get:${stageVariables.lambdaAlias}\n**here stageVariables is built-in name, lambdaAlias is custom variable
  * Canary deployment using Stages\n*create stage "prod" and enable canary\n*configure 90% traffic to "prod" and rest to "canary"\n*from now on each deploy to "prod" will actually go to canary\n*you can click "promote" canary to be actual prod deployment 
+ * Integration Types\n*Mock - respond without sending request to the backend\n*HTTP/AWS Lambda & services - optionally modify and forward request\n**must configure integration request&response\n**setup data mapping (using mapping templates) for request&response\n*AWS_PROXY (Lambda Proxy)\n**incoming request is the input to Lambda function\n**no data mapping , the function must deal with original request data\n*HTTP_PROXY\n**no data mapping\n**HTTP request is passed to the backend
+  * Mapping examples\n*convert JSON to XML to expose SOAP service as REST\n*rename query string parameters for backend
+ * API Import/Export support\n*Swagger2\n*OpenAPI3\n*Postman
+ * Caching\n*default TTL is 300s\n*caches are defined per stage\n**but can be overriden on method-level\n*cache can be encrypted\n*capacity 0.5-237GB\n*expensive - use only in production env
+  * Invalidation\n*flush entire cache from UI\n*invalidate entry with header:\n**Cache-Control: max-age=0\n**requires IAM authorization
  @endmindmap
