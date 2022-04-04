@@ -31,4 +31,16 @@ mindmapDiagram {
  * API Import/Export support\n*Swagger2\n*OpenAPI3\n*Postman
  * Caching\n*default TTL is 300s\n*caches are defined per stage\n**but can be overriden on method-level\n*cache can be encrypted\n*capacity 0.5-237GB\n*expensive - use only in production env
   * Invalidation\n*flush entire cache from UI\n*invalidate entry with header:\n**Cache-Control: max-age=0\n**requires IAM authorization
+ * Usage Plans & API Keys\n*you can decide who can call what stages\n*can also decide calls quota/month\n*can decide throttling above a max number of calls/second\n*provide the Plan API Key in http header: "X-API-Key"
+ * Monitoring\n*CloudWatch logs\n*X-Ray - for distributed tracing\n*CloudWatch metrics\n**CacheHitCount, CacheMissCount\n**Count - total no of api calls\n**IntegrationLatency- how long it takes for backend to respond\n**Latency - how long it takes for entire API Gateway to respond\n**4xx error count, 5xx error count
+ * API Gateway limits&throttling\n*gateweay response timeout is 29 seconds\n*soft limit of 10'000 requests/s across all APIs\n**429 Too many requests\n**can be increased upon request\n*can set Stage limit and Method limit for better quota granularity\n*or define Usage plans to limit per-customer
+ * Enabling CORS for hitting lambdas through API Gateway\n*for non-proxy - use Actions in API Gateway->APIs->Resources menu\n*for proxy - add header in your lambda response
+ * Security
+  * IAM Permissions\n*Authentication - IAM\n*Authorization - IAM Policy\n*uses "Sig v4" capability - IAM credentials in headers
+  * Resource Policies\n*who and how can use my API Gateway\n*allow for cross-account access (combined with IAM security)
+  * Cognito User Pools\n*for authentication\n*authorization done with API Gateway Methods
+  * Lambda Authorizer - a Lambda function\n*token based, eg. JWT or OAuth\n*or request based, eg. query string, headers\n*returns IAM Principal+IAM Policy that gets cached\n*authentication is external\n*authorizations is done by Lambda function
+ * Integrations\n*REST\n*HTTP - poor and cheap version of REST\n*WebSocket  
+ * WebSockets\n*opens persistent connection (creates connectionId)\n*enable two-way communication, eg. for chat\n*server can send message to client using **callback url**
+  * Routing\n*incoming message is routed using **route selection expression**\n**routing is based on selected field of the message (JSON format)\n**example: $request.body.action\n*if no routes -> send to $default
  @endmindmap
