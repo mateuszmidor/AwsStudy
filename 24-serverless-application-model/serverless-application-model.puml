@@ -27,4 +27,5 @@ mindmapDiagram {
  * Policy Templates\n*list of templates that can be applied to lambda functions, eg:\n**S3ReadPolicy - gives the function permission to read S3\n**SQSPollerPolicy - gives permission to poll SQS queue\n**DynamoDBCrudPolicy - gives permission to CRUD DynamoDB table
  * SAM and CodeDeploy\n*SAM natively uses CodeDeploy to update Lambda Functions\n*can be manually extended with pre-hooks and post-hooks, eg for testing
  * Exam\n*SAM is built on top of CloudFormation using YAML templates\n*Template YAML needs to have Transform and Resources sections\n*commands:\n**sam build - fetch dependencies and create local artifacts\n**sam package - package and  upload to S3, egnerate CloudFormation template\n**sam deploy - deploy to CloudFormation\n*SAM Policy templates - useful for easy IAM policy definition\n*SAM is integrated with CodeDeploy to deploy to weighted Lambda Aliases\n**including canary deployment
+ * SAR - Serverless Application Repository\n*applications built using SAM can be distributed using SAR\n*application can be customized using environment variables
 @endmindmap
