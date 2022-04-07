@@ -1,0 +1,28 @@
+@startmindmap 00-diagram
+
+title Cloud Development Kit (CDK)
+
+<style>
+mindmapDiagram {
+  .trail {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .xray {
+    BackgroundColor LightSkyBlue
+  }
+  .watch {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>CDK - Cloud Development Kit
+ * Overiew:\n*define your cloud infrastructure in Java/.NET/Python/JavaScript\n*works like CloudFormation, but you use eg. Java instead of YAML\n*eventually, your code gets translated to CloudFormation YAML anyway :)\n*this approach allows you to deploy infrastructure and applicatin code together\n**it leverages programming language's features like type-safety and linters
+ * CDK vs SAM
+  * SAM (Serverless Application Model)\n*serverless-focused\n*good for Lambda\n*uses YAML\n*uses CloudFormation
+  * CDK\n*all AWS services\n*write infrastructure in your favourite language
+@endmindmap
