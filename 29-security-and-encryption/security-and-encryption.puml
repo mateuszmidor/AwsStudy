@@ -1,0 +1,28 @@
+@startmindmap 00-diagram
+
+title Security & Encryption - KMS, Encryption SDK, SSM Parameter Store, IAM&STS
+
+<style>
+mindmapDiagram {
+  .error {
+    BackgroundColor Salmon
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .express {
+    BackgroundColor LightSkyBlue
+  }
+  .appsync {
+    BackgroundColor LightGreen
+  }
+}s
+</style>
+
+
+*[#Orange] <b>Security & Encryption
+ * Encryption\n*in-flight\n**data is enrypted on client side and decrypted server side\n**SSL helps to achieve that\n**like HTTPS\n**protects against Ma In The Middle attack\n*at-rest\n**data is encrypted on server side when it is received\n**data is decrypted before sending to client\n**encryption is using keys, usually managed by KMS\n*client side encryption\n**data is encrypted by client and sent to server\n**server is unable to decrypt the data; it will be decrypted by another requesting client\n**can use Envelope Encryption
+ * KMS - Key Managenent Service\n*encryption/decryption\n*easy way to control who can access your data in AWS\n*integrated with IAM for authorization\n*integrated with\n**EBS\n**S3\n**RDS\n**Redshift - data warehouse\n**SSM - parameter store\n*worsk with CLI and SDK\n*can fully manage the keys and policies:\n**create, enable, disable keys\n**rotate policies\n*can audit keys usage with CloudTrail\n*KMS keys are bound to AWS regions\n*how to move encrypted EBS to another region?\n**copy EBS snapshot but specify NEW key for it in target region
+  * **Customer Master Key** (CMK) types:\n*Symmmetric AES-256\n**first offered encryption in AWS\n**necessary for Envelope Encryption\n**you never see the actual key\n**use KMS to use the key\n*Asymmetric Key (RSA & ECC key pairs)\n**public key (encyption) + private key (decryption)\n**used for encrypt/decrypt or sign/verify operations\n**public key is downloadable\n**you never see the private key\n**use case: encryption outside AWS (without KMS access)\n*CMK sources:\n**AWS Managed Service Default CMK - free\n**user-created key in KMS - 1$/month\n**user-imported key (must be 256 symmetric) - 1$/month\n*KMS API calls are paid: 3 cents / 10'000 calls\n*KMS can encrypt max 4KB data/call, for more - use Envelope Encyption
+  * Key Policies\n*similar to S3 bucket policies, IAM policies etc\n*without policy no one can access the key\n*default policy - full access to the key for AWS account root    
+@endmindmap
