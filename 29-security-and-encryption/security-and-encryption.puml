@@ -10,10 +10,10 @@ mindmapDiagram {
   .orange {
     BackgroundColor orange
   }
-  .express {
+  .kms {
     BackgroundColor LightSkyBlue
   }
-  .appsync {
+  .envelope {
     BackgroundColor LightGreen
   }
 }s
@@ -22,7 +22,12 @@ mindmapDiagram {
 
 *[#Orange] <b>Security & Encryption
  * Encryption\n*in-flight\n**data is enrypted on client side and decrypted server side\n**SSL helps to achieve that\n**like HTTPS\n**protects against Ma In The Middle attack\n*at-rest\n**data is encrypted on server side when it is received\n**data is decrypted before sending to client\n**encryption is using keys, usually managed by KMS\n*client side encryption\n**data is encrypted by client and sent to server\n**server is unable to decrypt the data; it will be decrypted by another requesting client\n**can use Envelope Encryption
- * KMS - Key Managenent Service\n*encryption/decryption\n*easy way to control who can access your data in AWS\n*integrated with IAM for authorization\n*integrated with\n**EBS\n**S3\n**RDS\n**Redshift - data warehouse\n**SSM - parameter store\n*worsk with CLI and SDK\n*can fully manage the keys and policies:\n**create, enable, disable keys\n**rotate policies\n*can audit keys usage with CloudTrail\n*KMS keys are bound to AWS regions\n*how to move encrypted EBS to another region?\n**copy EBS snapshot but specify NEW key for it in target region
-  * **Customer Master Key** (CMK) types:\n*Symmmetric AES-256\n**first offered encryption in AWS\n**necessary for Envelope Encryption\n**you never see the actual key\n**use KMS to use the key\n*Asymmetric Key (RSA & ECC key pairs)\n**public key (encyption) + private key (decryption)\n**used for encrypt/decrypt or sign/verify operations\n**public key is downloadable\n**you never see the private key\n**use case: encryption outside AWS (without KMS access)\n*CMK sources:\n**AWS Managed Service Default CMK - free\n**user-created key in KMS - 1$/month\n**user-imported key (must be 256 symmetric) - 1$/month\n*KMS API calls are paid: 3 cents / 10'000 calls\n*KMS can encrypt max 4KB data/call, for more - use Envelope Encyption
-  * Key Policies\n*similar to S3 bucket policies, IAM policies etc\n*without policy no one can access the key\n*default policy - full access to the key for AWS account root    
+ * KMS - Key Managenent Service\n*encryption/decryption\n*easy way to control who can access your data in AWS\n*integrated with IAM for authorization\n*integrated with\n**EBS\n**S3\n**RDS\n**Redshift - data warehouse\n**SSM - parameter store\n*worsk with CLI and SDK\n*can fully manage the keys and policies:\n**create, enable, disable keys\n**rotate policies\n*can audit keys usage with CloudTrail\n*KMS keys are bound to AWS regions\n*how to move encrypted EBS to another region?\n**copy EBS snapshot but specify NEW key for it in target region <<kms>>
+  * **Customer Master Key** (CMK) types:\n*Symmmetric AES-256\n**first offered encryption in AWS\n**necessary for Envelope Encryption\n**you never see the actual key\n**use KMS to use the key\n*Asymmetric Key (RSA & ECC key pairs)\n**public key (encyption) + private key (decryption)\n**used for encrypt/decrypt or sign/verify operations\n**public key is downloadable\n**you never see the private key\n**use case: encryption outside AWS (without KMS access)\n*CMK sources:\n**AWS Managed Service Default CMK - free\n**user-created key in KMS - 1$/month\n**user-imported key (must be 256 symmetric) - 1$/month\n*KMS API calls are paid: 3 cents / 10'000 calls\n*KMS can encrypt max 4KB data/call, for more - use Envelope Encyption <<kms>>
+  * Key Policies\n*similar to S3 bucket policies, IAM policies etc\n*without policy no one can access the key\n*default policy - full access to the key for AWS account root <<kms>>
+ * Envelope Encryption\n*required for encrypting data > 4KB\n*data encryption and decryption happens on client side\n*implemented in AWS Encryption SDK <<envelope>>
+  * Encryption:\n*use GenerateDataKey API to get Data Encryption Key (DEK)\n**we also get encrypted version of the key, so 2 keys in total\n*then encrypt the data on client side using the received key\n*then pack the encrypted data together with encrypted key\n**this is the so-called envelope <<envelope>>
+  * Decryption:\n*decrypt the encrypted DEK key using KMS Decrypt API\n*decrypt the data on client side using the DEK <<envelope>>
+  * Data Encyption Key caching\n*the key can be cached and reused\n*this limits number of KMS API calls -> lower cost\n*but is less secure <<envelope>>
+ * Exam - KMS symmetric API:\n*Encrypt - encrypt data server-side up to 4KB\n*Decrypt - decrypt server-side up to 4KB\n*GenerateDataKey - DEK for client-side encryption\n**this returns plaintext key + encrypted key\n*GenerateDataKeyWithoutPlaintext\n**returns only the encrypted key\n**must use KMS Decrypt later\n*GenerateRandom - returns random byte string
 @endmindmap
