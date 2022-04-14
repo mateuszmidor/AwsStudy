@@ -4,8 +4,8 @@ title Security & Encryption - KMS, Encryption SDK, SSM Parameter Store, IAM&STS
 
 <style>
 mindmapDiagram {
-  .error {
-    BackgroundColor Salmon
+  .s3 {
+    BackgroundColor LightCyan
   }
   .orange {
     BackgroundColor orange
@@ -31,4 +31,8 @@ mindmapDiagram {
   * Decryption:\n*decrypt the encrypted DEK key using KMS Decrypt API\n*decrypt the data on client side using the DEK <<envelope>>
   * Data Encyption Key caching\n*the key can be cached and reused\n*this limits number of KMS API calls -> lower cost\n*but is less secure <<envelope>>
  * Exam - KMS symmetric API:\n*Encrypt - encrypt data server-side up to 4KB\n*Decrypt - decrypt server-side up to 4KB\n*GenerateDataKey - DEK for client-side encryption\n**this returns plaintext key + encrypted key\n*GenerateDataKeyWithoutPlaintext\n**returns only the encrypted key\n**must use KMS Decrypt later\n*GenerateRandom - returns random byte string
+ * S3 encryption\n*SSE=Server Side Encryption\n*SSE-S3 - keys are managed by AWS\n*SSE-KMS - keys managed by KMS\n*SSE-C - keys managed by client\n*Client Side Encryption - encryption happens on client side <<s3>>
+  * SSE-KMS\n*KMS advantages: user control + audit trail\n*encryption on server side\n*must set header: "x-amz-server-side-encryption":"aws:kms"\n*uses GenerateDataKey & Decrypt KMS API - works with large objects\n*KMS API calls show up in CloudTrail (api usage logging)\n*S3 calls towards KMS are included in KMS quota!\n*it's possible to force SSL connections for S3\n**do this by checking aws:SecureTransport option<<s3>>
+ * S3 bucket key for SSE-KMS\n*to reduce KMS API calls and cost by 99%\n*S3 bucket key is generated once using GenerateDataKey,\n   and then reused to encrypt objects in given bucket
+ * SSM Parameter Store\n*to securily store parameters and configuration\n*optional encryption with KMS\n*allows building a hierarchy, like folder structure\n**eg separate parameter set per department, per application\n*Parameter Store flavours:\n**standard - max 10k params, free\n**advanced - max 100k params, paid
 @endmindmap
