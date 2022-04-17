@@ -1,0 +1,37 @@
+@startmindmap 00-diagram
+
+title Other Services
+
+<style>
+mindmapDiagram {
+  .s3 {
+    BackgroundColor LightCyan
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .databases {
+    BackgroundColor LightSkyBlue
+  }
+  .envelope {
+    BackgroundColor LightGreen
+  }
+  .manager {
+    BackgroundColor LightPink
+  }
+}s
+</style>
+
+
+*[#Orange] <b>Other Services
+ * **SES - Simple Email Service**\n*allows to send/receive emails\n*integrated with IAM for sending emails
+ * **Databases** <<databases>>
+  * **RDS - Relational Databases**\n*good for OLTP - Online Transaction Processing\n*PostgreSQL, MySQL, Oracle,...\n*Aurora + Aurora serverless\n*manually provisioned database, doesn't scale horizontally  <<databases>>
+  * **DynamoDB**\n*NoSQL database\n*managed\n*key-value, but can store documents up to 400KB\n*serverless\n*uses RCU and WCU (read/write capacity units)\n**can adjust RCU/WCU automatically (more expensive)  <<databases>>
+  * **ElastiCache**\n*in-memory\n*provisioned\n*Redis or Memcached used as storage\n*can cache data from other databases, HTTP queries or session data  <<databases>>
+  * **Redshift**\n*provisioned in advance\n*good for OLAP - Online Analytical Processing\n*data warehouse\n*data lake\n*analytics queries  <<databases>>
+  * **Neptune**\n*graph database  <<databases>>
+  * **DMS**\n*database migration service\n*when you need to move data between databases  <<databases>>
+  * **DocumentDB**\n*managed MongoDB for AWS  <<databases>>
+ * **ACM - AWS Certificate Manager**\n*provision, manage and deploy SSL/TLS certificates\n*used for in-flight encryption for websites (HTTPS)
+@endmindmap
