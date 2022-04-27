@@ -1,0 +1,85 @@
+@startmindmap mindmap
+
+title Route53 (DNS Registrar)
+
+<style>
+mindmapDiagram {
+  .green {
+    BackgroundColor lightgreen
+  }
+  .red {
+    BackgroundColor red
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .policy {
+    BackgroundColor lightblue
+  }
+  .record {
+    BackgroundColor violet
+  }
+  .health {
+    BackgroundColor lightgreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>Route53\npossible to buy domain name from another vendor\nand point it to AWS DNS servers for managing dns records
+left side
+ * Health Checks\n*Checkers live in internet\n*can't access your private IPs\n*but can access their CloudWatch alarms <<health>>
+  * Monitor an Endpoint\n*10 or 30 sec (cheaper) interval by ~15 checkers so every 2 sec\n*default of 3 failures threshold\n*HTTP, HTTPS, TCP\n*checkers must be allowed by Security Group <<health>>
+   *_ Endpoint healthy when:\n*response code is 2xx or 3xx\n*>82% checkers report healthy\n*can grep first 5120 bytes of response text <<health>>
+  * Calculated Health Checks\n*monitor endpoints, other health checks or CloudWatch alarm\n*OR, AND, NOT operators <<health>>
+ * Hosted zones
+  * Private - access from inside VPC
+  * Public - access from internet
+right side
+ *[#Aquamarine] DNS
+  * Routing Policy <<policy>>
+   * Simple - load equally shared, no health checks  <<policy>>
+   * Weighted - allow health checks <<policy>>
+    *_ "0" means send no traffic there <<policy>>
+   * Latency - By minimum latency with AWS Region selected <<policy>>
+   * Failover - Primary and secondary Endpoint + Health Checks <<policy>>
+   * Geolocation - By country, with default endpoint to serve "others" <<policy>>
+   * Geoproximity - By location, eg traffic divided among Houston, Warsaw and Beijing,\nwith possible bias value to send more traffic to either of them (shown on world map)\nMust use AWS Traffic flow feature and pay 50$/month! <<policy>>
+   * Multivalue - client-side load balancing (client decides)\nup to 8 healthy DNS records are returned to choose from <<policy>>
+  * Record Types <<record>>
+   * A - hostname -> IPv4 <<record>>
+   * AAAA - hostname -> IPv6<<record>>
+   * CNAME - hostname -> another hostname\nThis is not like http 302 redirect! <<record>>
+    *_ target must be A or AAAA record <<record>>
+   * NS - Name Servers for Hosted Zone:\nPrivate (company internal) or Public (internet) <<record>>
+  * Hierarchy\nhttp://api.www.mateuszmidor.com.
+   * Root - last dot "." that is never displayed
+   * Top Level Domain (TLD) - ".com."
+   * Second Level Domain (SLD) - ".mateuszmidor.com."
+   * Subdomain - ".www.mateuszmidor.com."
+   * Domain Name - "api.www.mateuszmidor.com."
+   * Fully Qualified Domain Name (FQDN) - "http://api.www.mateuszmidor.com"
+
+
+* Route53 DNS:\nhttps://mateuszmidor.link
+ * Application Load Balancer\nSSL Termination TCP 443 -> 80\nCA:minica 
+  *[#Red] EC2 Red instance :80
+  *[#Blue] EC2 Blue instance :80
+
+
+'   * create() <<blue>>
+'   * get() <<green>>
+'   * update() <<orange>>
+'   * delete() <<red>>
+
+' left side '
+
+'  * query_api
+'   * url <<violet>>
+'    *_ url
+'   * data() <<violet>>
+'    *_ rows
+'   * chart() <<violet>>
+'    *_ image_type
+'    *_ image_data
+@endmindmap
