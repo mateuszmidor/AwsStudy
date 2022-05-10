@@ -1,0 +1,42 @@
+@startmindmap mindmap
+
+title Developer-centric application deployment
+
+<style>
+mindmapDiagram {
+  .migration {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .run {
+    BackgroundColor LightSkyBlue
+  }
+  .components {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>Elastic Beanstalk (EBS)\nbased on CloudFormation
+ * Components:\n*Applicatin - environments, versions, configurations\n*Version - iteration of your application code\n*Environment:\n** AWS resources running the application\n** Tiers\n** You can run multiple environments (dev, test, prod, ...) <<components>>
+  * Tiers:\n*Web Server Tier - for serving HTTP:\nLoadBalancer + AutoScalingGroup + EC2\n*Worker Tier - for processing work:\nSQS Queue + AutoScalingGroup + EC2 <<components>>
+ * Run WebServer <<run>>
+  * Go WebServer:\n*define main() in application.go\n*make server listen on port 5000\n*upload code as ZIP archive\n*EBS will: go build application.go <<run>>
+  * Dockerized WebServer:\n*define Dockerfile\n*make server listen on port 80\n*upload code as ZIP archive\n*EBS will: docker build . <<run>>
+ * Deployment modes:\n*Single instance\n*High Availability with LoadBalancer, across AZs
+ * Lifecycle Policy\n*Beanstalk stores max 1000 application versions\n*lifecycle policy can be configured to trash versions\n*can trash based on upper version count limit or age\n*trashed version still remains in S3 unless configured otherwise
+ * EBS - Docker
+  * Single Docker Container\n*runs single container on EC2\n*you provide Dockerfile or Dockerrun.aws.json (image location)\n*no ECS is used, just plain Docker on EC2
+  * Multi Docker Container\n*runs multiple containers on EC2\n*creates ECS cluster, EC2 instances, LoadBalancer, Task definition\n*you provide Dockerrun.aws.json in ZIP root\n*ECS task definition is generated from Dockerrun.aws.json\n*Docker image must be pre-built
+left side
+ * Deployment optins for application update:\n*batch size - max number of instances to replace in signle phase\n*all at once - kill all old instances, create new ones, fast, assumed downtime\n*rolling update - slow if many instances to update\n*rolling with additional batches:\ncreate additional instances so performance is not impacted,\nslow if many instances, small additional cost\n*immutable - create new instances in new "immutable" AutoScalingGroup, wait till it pass HealthCheck,\nmove it to old AutoScalingGroup, remove "immutable"  AutoScalingGroup, kill old instance, slowest(why?),\npotentially big additional cost\n*manual Blue/Green deployment: create blue environment and green environment, check green works,\nmanually "Swap environment URLs" environment action for blue and green environments\n*traffic splitting (canary testing) - main and temporary ASG (same size!),\nsend 90% traffic to main and 10% to temp, if all fine - migrate instances\nfrom temp to main and kill those old main ones, fast approve,/rollback\nautomated not manual like BlueGreen
+ * EBS CLI - "eb" command:\n*create, deploy, terminate\n*status, health\n*events, logs\n*config
+ * .ebextensions/\n*folder in root of ZIP file you upload to EBS\n*contains application configuration eg. env variables\n*YAML of JSON with .config extension, eg. logging.config\n*can add resources like RDS, ElastiCache or DynamoDB;\nthis can be done thanks to CloudFormation\n*but remember: these resources will be destroyed together with EBS environment!
+ * EBS Migration <<migration>>
+  * Change LoadBalancer (can't modify after environment has been created):\n*create copy of the environment but with new Loadbalancer\n*"Swap environment URLs" <<migration>>
+  * Change RDS from stack-internal to external:\n*create snapshot of original database\n*create copy of the environment but with new db connection string\n*"Swap environment URLs" <<migration>>
+
+@endmindmap
