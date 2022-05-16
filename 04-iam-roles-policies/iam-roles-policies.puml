@@ -4,19 +4,19 @@ title AWS CLI, SDK, IAM, Roles & Policies
 
 <style>
 mindmapDiagram {
-  .encryption {
+  .iam {
     BackgroundColor Pink
   }
-  .versioning {
+  .policy {
     BackgroundColor Violet
   }
   .orange {
     BackgroundColor orange
   }
-  .security {
+  .api_limits {
     BackgroundColor LightSkyBlue
   }
-  .cors {
+  .svc_limits {
     BackgroundColor LightGreen
   }
 }
@@ -24,22 +24,22 @@ mindmapDiagram {
 
 
 *[#Orange] <b>cli, sdk, iam, roles, policies
- * IAM
-  * Can be assigned a group, group has attached policies
-  * Can have directly attached policies
- * Policy
-  * Policy Generator\nhttps://awspolicygen.s3.amazonaws.com/policygen.html
-  * Policy Simulator\nhttps://policysim.aws.amazon.com/home/index.jsp\n(Works on users/roles/groups in your currently logged-in account!)
+ * IAM <<iam>>
+  * Can be assigned a group, group has attached policies <<iam>>
+  * Can have directly attached policies <<iam>>
+ * Policy <<policy>>
+  * Policy Generator\nhttps://awspolicygen.s3.amazonaws.com/policygen.html <<policy>>
+  * Policy Simulator\nhttps://policysim.aws.amazon.com/home/index.jsp\n(Works on users/roles/groups in your currently logged-in account!) <<policy>>
  * SDK
   * Python - boto3/botocore
- * API Limits (Quotas)\nUse Retrying with Exponential Backoff\n(AWS SDK does this for you) for:\n*Intermittent Errors: http 5xx\n*Throttling Exceptions
-  * EC2 Describe Instances - 100 GET/s
-  * S3 Get Object - 5500 GET/s per prefix
- *  Service limits(Quotas)
-  * EC2 On Demand instances - 1152 vCPUs\nfor more need to open a ticket or use Quota API 
+ * API Limits (Quotas)\nUse Retrying with Exponential Backoff\n(AWS SDK does this for you) for:\n*Intermittent Errors: http 5xx\n*Throttling Exceptions <<api_limits>>
+  * EC2 Describe Instances - 100 GET/s <<api_limits>>
+  * S3 Get Object - 5500 GET/s per prefix <<api_limits>>
+ *  Service limits(Quotas) <<svc_limits>>
+  * EC2 On Demand instances - 1152 vCPUs\nfor more need to open a ticket or use Quota API <<svc_limits>>
 left side
- * CLI\n*default region is us-east-1 (North Virginia)\n*credentials lookup order: \ncmdline params, env variables, \~/.aws/credentials, \~/.aws/config, container credentials, instance profile credentials\n*some commands offer a dry run option to avoid creating expensive objects:\n<b>aws ec2 run-instances --dry-run --instance-type t2.micro --image-id ami-04505e74c0741db8d
- * STS\n*decode error returned from --dry-run\n<b>aws sts decode-authorization-message --encoded-message UbtqyWqDeKvXqWxiUP5PWWGHwdOx...
+ * CLI\n*default region is us-east-1 (North Virginia)\n*credentials lookup order: \ncmdline params, env variables, \~/.aws/credentials, \~/.aws/config, container credentials, instance profile credentials\n*some commands offer a dry run option to avoid creating expensive objects:\n<b>aws ec2 run-instances ----dry-run --instance-type t2.micro --image-id ami-04505e74c0741db8d
+ * STS (Security Token Service)\n*decode error returned from --dry-run\n<b>aws sts decode-authorization-message --encoded-message UbtqyWqDeKvXqWxiUP5PWWGHwdOx...
  * Instance metadata - information about instance itself\n*<b>curl http://169.254.169.254/latest/meta-data
  * CLI with MFA (Multi Factor Authentication)\n*first need to register your MFA device or Google Authenticator\n*then obtain access key, secret key and session token with:\n<b>aws sts get-session-token ...\n*then create dedicated profile with:\n<b>aws configure --profile=mfa\n*then use it\n<b>aws s3 ls --profile=mfa
  * API\n*HTTP requests towards AWS API are signed with your credentials\n(access key and secret key) using Signature V4 (SigV4)\nin either http header or URL string (eg. S3 pre-signed URL)
