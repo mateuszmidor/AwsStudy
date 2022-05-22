@@ -1,0 +1,25 @@
+@startmindmap mindmap
+
+title Getting started with AWS
+
+<style>
+mindmapDiagram {
+  .infra {
+    BackgroundColor LightSkyBlue
+  }
+  .services {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+*[#Orange] <b>Getting started
+ * <b>History</b>\n*internally launched at Amazon in 2002\n*published SQS service in 2004\n*published S3 and EC2 in 2006
+ * <b>Global infrastructure</b>\n*Regions\n*Availability Zones\n*Data Centers\n*Edge Locations/Points of Presence<<infra>>
+  * <b>Region</b>\n*eg. us-east-1 (North Virginia, cheapest)\n*it is a cluster of data centers around a city\n*most AWS services are region-scoped<<infra>>
+   * <b>How to choose a region</b>\n*Compliance - if data must stay within given country\n*Latency - use region close to your customers\n*Available services - use region that offers the needed service\n*Pricing - prices differ from region to region<<infra>>
+  * <b>Availability Zones</b>\n*each Region has 2-6 Availability Zones\n**eg. us-east-1a, us-east-1b, us-east-1c\n*Availability Zone is one or more DataCenters\n*they are geo-isolated to prevent joint disaster\n*connected with high-bandwith, ultra low-latency network\n*together they form a Region<<infra>>
+  * <b>Points of Interest/Edge Locations</b>\n*make content delivered to the users with lower latency (CDN)<<infra>>
+ * <b>Global Services</b>\n*IAM - Identity & Access Management\n*Route53 - DNS service\n*Cloud Front- Content Delivery Network\n*WAF - Web Application Firewall<<services>>
+  * <b>Most services are region-scoped, though </b>\nlike:\n*EC2\n*Elastic Beanstalk\n*Lambda\n*Rekognition<<services>>
+@endmindmap
