@@ -1,0 +1,35 @@
+@startmindmap mindmap
+
+title RDS, Aurora, Elasticache
+
+<style>
+mindmapDiagram {
+    .rds {
+        BackgroundColor  LightGreen
+  }
+    .elasticache {
+        BackgroundColor  LightBlue
+  }  
+}
+</style>
+
+
+*[#Orange] <b>RDS,\n<b>Aurora,\n<b>Elasticache
+ * <b>RDS <<rds>>
+  * <b>Overview\n*Relational Database Service\n*managed service:\n**automatic software upgrades\n**automatic backups every 5 minutes\n**monitoring dashboards\n**read replicas for performance\n**multi AZ setup for Disaster Recovery\n**horizontal and vertical scaling\n**storage backed by EBS gp2 or io1\n*can manually make a snapshot of the DB\n*can't SSH into your instances <<rds>>
+  * <b>Engines:\n*MySQL\n*Postgress\n*MariaDB\n*Oracle\n*MS SQL Server<<rds>>
+  * <b>Storage Auto Scaling\n*AWS automatically increases storage when DB is running out of space\n*Maximum Storage Threshold - scaling honors this limit<<rds>>
+  * <b>Read Replicas for Read Scalability\n*up to 5 replicas\n*within AZ, cross-AZ, cross-Region\n*replication is async - data is eventually consistent\n*application must update connection string to use new read replicas\n*when replicas stay in the same Region - data transfer between Availability Zones is free\n**for non-RDS scenarios, such inter-AZ transfer is paid <<rds>>
+  * <b>Disaster Recovery - Multi AZ\n*replication is done synchronously to stand-by DB instance\n**stand-by instance lives in a different AZ\n*both instances are accessed under the same DNS name\n**fast fail-over to stand-by instance\n**stand-by instance becomes new master\n*stand-by instance is not used for scaling\n*read replicas can be setup as multi-AZ for Disaster Recovery\n*switch DB from single-AZ to multi-AZ:\n**just modify your database->check "Multi AZ" and done!\n**zero downtime operation <<rds>>
+  * <b>Security - Encryption\n*at-rest encryption of master and read replicas is available\n**with AWS KMS: AES-256 encryption\n**must be enabled at launch time\n**if master is not encrypted, read replicas can't be encrypted\n**Transparent Data Encryption available for MS SQL Server and Oracle\n*in-flight encryption\n**using SSL certificates\n*encryption of backups\n**snapshot of unencrypted DB is unencrypted\n**snapshot of encrypted DB is encrypted\n**can copy unencrypted snapshot into encrypted snapshot\n*encryption of formely un-encrypted DB\n**make an encrypted snapshot\n**restore DB from encrypted snapshot\n**migrate applications to new encrypted DB\n*network & IAM\n**RDS databases are usually deployed in a private subnetwork\n**they use Security Groups for network access\n**IAM policies control who can manage AWS RDS\n*authentication:\n**username + password\n**IAM based authentication available for MySQL and Postgres - auth token <<rds>>
+ * <b>Amazon Aurora\n*backed by MySQL or Postgres\n*cloud-optimized\n**5x faster than MySQL on RDS, 3x faster than Postgres on RDS\n*it's storage grows automatically in increments of 10GB up to 128TB\n*possible to have up to 15 replicas (other RDS databases - max 5 replicas)\n*failover to standby instance is instantaneous, much faster than other RDS databases\n*High Availability - 6 copies living in 3 Availability Zones\n*Writer Endpoint (URL) - always points to master, even right after failover\n*Reader Endpoint (URL) - points to loadbalancer of read replicas\n*Aurora Security is the same as RDS security
+ * <b>ElastiCache<< elasticache>>
+  * <b>Overview\n*backed by Redis or Memcached\n*in-memory database with high performance and low latency\n*reduces read-related workload from databases\n*using cache requires heavy changes in application code<< elasticache>>
+   * <b>Redis\n*multi-AZ with failover\n*read replicas\n*data persistence\n*backups << elasticache>>
+   * <b>Memcached\n*multi-node data sharding\n*no High Availability\n*no persistence\n*no backups<< elasticache>>
+  * <b>Update Strategies<< elasticache>>
+   * <b>Lazy Loading/Cache-Aside/Lazy Population\n*first check if data is in cache\n*if miss - fetch data and populate cache\n*only requested data is cached\n*node failure only increases latency (cache warmup)\n*but cache miss incurs 3 data round  trips\n*with time, data in cache may get stale << elasticache>>
+   * <b>Write-Through\n*update cache when database is updated\n*data is never stale\n*but each write requires 2 calls (db and cache)\n*a lot of cached data will never be used << elasticache>>
+  * <b>Data Eviction and Time To Live (TTL) \n*evictions - 3 ways:\n**cache entries can be deleted manually\n**Least Recently Used entry is deleted when storage is running low\n**Time To Live is up, then entry is deleted<< elasticache>>
+  * <b>Replication\n*Cluster Mode disabled\n**1 primary node for writing, up to 5 read replicas\n*Cluster Mode enabled\n**data partitioned across shards to scale writes\n**up to 500 nodes per cluster<< elasticache>>
+@endmindmap
