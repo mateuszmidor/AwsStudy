@@ -22,64 +22,48 @@ mindmapDiagram {
   .health {
     BackgroundColor lightgreen
   }
+  .hierarchy {
+    BackgroundColor LightSteelBlue
+  }
 }
 </style>
 
 
-*[#Orange] <b>Route53\npossible to buy domain name from another vendor\nand point it to AWS DNS servers for managing dns records
+*[#Orange] <b>Route53
 left side
- * Health Checks\n*Checkers live in internet\n*can't access your private IPs\n*but can access their CloudWatch alarms <<health>>
-  * Monitor an Endpoint\n*10 or 30 sec (cheaper) interval by ~15 checkers so every 2 sec\n*default of 3 failures threshold\n*HTTP, HTTPS, TCP\n*checkers must be allowed by Security Group <<health>>
-   *_ Endpoint healthy when:\n*response code is 2xx or 3xx\n*>82% checkers report healthy\n*can grep first 5120 bytes of response text <<health>>
-  * Calculated Health Checks\n*monitor endpoints, other health checks or CloudWatch alarm\n*OR, AND, NOT operators <<health>>
- * Hosted zones
-  * Private - access from inside VPC
-  * Public - access from internet
+ * <b>Domain Registrar\n* allows to register your own domain name\n*also possible to buy domain name from another vendor eg. GoDaddy\nand point it to AWS DNS servers for managing dns records:\n**create Route53 Hosted Zone\n**point GoDaddy NS record to DNS server IPs listed in your Hosted Zone
+ * <b>Hosted zones:\n* Private - access from inside VPC; company intranet\n*Public - access from internet <<zones>>
+ * <b>Health Checks\n*15 global checkers are living in the internet\n*they are only for public resources\n*they can't access your private IPs\n*but can access CloudWatch alarms\n   triggered by private resources<<health>>
+  * <b>Monitor an Endpoint\n*10 or 30 sec (cheaper) interval by ~15 checkers so every 2 sec\n*default of 3 failures threshold\n*HTTP, HTTPS, TCP\n*checkers must be allowed by Security Group <<health>>
+  * <b>Calculated Health Checks\n*can monitor endpoints, other health checks or CloudWatch alarm\n*can monitor up to 256 Child Health Checks\n*can combine checks with OR, AND, NOT operators <<health>>
+  * <b>Endpoint healthy when:\n*response code is 2xx or 3xx\n*>18% checkers report healthy\n*can grep first 5120 bytes of response text\n to determine if endpoint is healthy or unhealthy<<health>>
 right side
- *[#Aquamarine] DNS
-  * Routing Policy <<policy>>
-   * Simple - load equally shared, no health checks  <<policy>>
-   * Weighted - allow health checks <<policy>>
-    *_ "0" means send no traffic there <<policy>>
-   * Latency - By minimum latency with AWS Region selected <<policy>>
-   * Failover - Primary and secondary Endpoint + Health Checks <<policy>>
-   * Geolocation - By country, with default endpoint to serve "others" <<policy>>
-   * Geoproximity - By location, eg traffic divided among Houston, Warsaw and Beijing,\nwith possible bias value to send more traffic to either of them (shown on world map)\nMust use AWS Traffic flow feature and pay 50$/month! <<policy>>
-   * Multivalue - client-side load balancing (client decides)\nup to 8 healthy DNS records are returned to choose from <<policy>>
-  * Record Types <<record>>
-   * A - hostname -> IPv4 <<record>>
+ *[#Aquamarine] <b>DNS
+  * <b>Hierarchy\nhttp://api.www.mateuszmidor.com. <<hierarchy>>
+   * Root - last dot "." that is never displayed <<hierarchy>>
+   * Top Level Domain (TLD) - ".com." <<hierarchy>>
+   * Second Level Domain (SLD) - ".mateuszmidor.com." <<hierarchy>>
+   * Subdomain - ".www.mateuszmidor.com." <<hierarchy>>
+   * Domain Name - "api.www.mateuszmidor.com." <<hierarchy>>
+   * Fully Qualified Domain Name (FQDN) - "http://api.www.mateuszmidor.com" <<hierarchy>>
+  * <b>Record Types <<record>>
+   * A - maps hostname to  IPv4 <<record>>
    * AAAA - hostname -> IPv6<<record>>
-   * CNAME - hostname -> another hostname\nThis is not like http 302 redirect! <<record>>
-    *_ target must be A or AAAA record <<record>>
-   * NS - Name Servers for Hosted Zone:\nPrivate (company internal) or Public (internet) <<record>>
-  * Hierarchy\nhttp://api.www.mateuszmidor.com.
-   * Root - last dot "." that is never displayed
-   * Top Level Domain (TLD) - ".com."
-   * Second Level Domain (SLD) - ".mateuszmidor.com."
-   * Subdomain - ".www.mateuszmidor.com."
-   * Domain Name - "api.www.mateuszmidor.com."
-   * Fully Qualified Domain Name (FQDN) - "http://api.www.mateuszmidor.com"
+   * CNAME - hostname -> another hostname\n*eg. www.myapp.com -> www.myapp.net\n*won't work for just myapp.com -> myapp.net (zone apex)\n*target must be A or AAAA record\n*this is not like http 302 redirect! <<record>>
+   * NS - Name Servers for Hosted Zone\n*they can respond to DNS queries\n*Private (company intranet) or Public (internet) <<record>>
+   * Option in records: Alias\n*route traffic to specified AWS resource:\n**ALB\n**CloudFront\n**API Gateway\n**and others\n*as opposed to CNAME, works also for zone apex\n**like myapp.com\n*alias is always of type A or AAAA\n*has built-in health check feature\n*can't manually set TTL <<record>>
+  * <b>Routing Policy <<policy>>
+   * <b>Simple\n*load is equally shared among provided IPs\n*no health checks are possible <<policy>>
+   * <b>Weighted\n*load is shared according to provided percentages\n*"0" means send no traffic there\n*health checks are possible <<policy>>
+   * <b>Latency\n*IP is selected by minimum latency\n*each IP must have manually associated AWS Region\n*health checks are possible  <<policy>>
+   * <b>Failover\n*select primary or secondary Endpoint based on Health Check <<policy>>
+   * <b>Geolocation\n*by country, with default endpoint to serve "others" <<policy>>
+   * <b>Geoproximity\n*by location, eg traffic divided among Beijing, Sao Paulo and Dublin\n*possible to set a bias value to send more traffic to either of them\n**this is nicely presented on a world map\n*must use AWS Traffic Flow->Traffic Policy feature and pay 50$/month! <<policy>>
+   * <b>Multivalue\n*client-side load balancing (client decides)\n*up to 8 healthy DNS records are returned to choose from\n*can use Health Checks to discard unhealthy endpoints\n*not a substitute for ELB (client side vs server side loadbalancing) <<policy>>
+  * <b>TTL\n*for how long the CLIENT will cache the DNS data before sending a new DNS query
 
-
-* Route53 DNS:\nhttps://mateuszmidor.link
- * Application Load Balancer\nSSL Termination TCP 443 -> 80\nCA:minica 
+* <b>Route53 DNS:\nhttps://mateuszmidor.link
+ * <b>Application Load Balancer\nSSL Termination TCP 443 -> 80\nCA:minica 
   *[#Red] EC2 Red instance :80
   *[#Blue] EC2 Blue instance :80
-
-
-'   * create() <<blue>>
-'   * get() <<green>>
-'   * update() <<orange>>
-'   * delete() <<red>>
-
-' left side '
-
-'  * query_api
-'   * url <<violet>>
-'    *_ url
-'   * data() <<violet>>
-'    *_ rows
-'   * chart() <<violet>>
-'    *_ image_type
-'    *_ image_data
 @endmindmap
