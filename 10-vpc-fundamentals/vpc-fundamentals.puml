@@ -1,0 +1,47 @@
+@startmindmap mindmap
+
+title VPC Fundamentals
+
+<style>
+mindmapDiagram {
+  .connection {
+    BackgroundColor lightsalmon
+  }
+  .access {
+    BackgroundColor LightSteelBlue
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .type {
+    BackgroundColor LightSkyBlue
+  }
+  .subnet {
+    BackgroundColor PaleVioletRed
+  }
+  .record {
+    BackgroundColor violet
+  }
+  .endpoint {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>VPC - Virtual Private Cloud\nRegional resource
+ * <b>Subnet\n*Availability Zone resource\n*allow to partition the network in VPC\n*access to internet and between Subnets\n   is achieved through Route Tables\n*CIDR\n**Classless Inter-Domain Routing\n**describes Subnet's IP address range <<subnet>>
+  * <b>Public\n*has access from internet\n*has Route to Internet Gateway that allows access to/from internet <<type>>
+  * <b>Private\n*no access from internet\n*has Route To Nat Gateway that allows access to internet, not from  <<type>>
+  * <b>NACL - Network Access Control List\n*a firewall that controls traffic to/from subnet\n*one NACL per-subnet\n*has ALLOW and DENY rules\n*rules operate on IP addresses only\n*default NACL in a Subnet allows all traffic in and out <<access>>
+  * <b>SG - Security Groups\n*attached to EC2/Elastic Network Interface\n*has ALLOW rules only\n*rules operate on IPs and other Security Groups <<access>>
+ * <b>Flow Logs\n*captures information about all traffic\n   going into your interfaces:\n**VPC Flow Logs\n**Subnet Flow Logs\n**Elastic Network Interface Flow Logs\n*good for troubleshooting:\n**why my connection doesn't get through\n**including ELB, ElastiCache, Aurora, etc\n*logs can go to S3 or CloudWatch logs
+ * <b>VPC Peering\n*connect 2 VPCs privately using AWS network\n*make them behave as they were in the same network\n*VPCs must have non-overlaping CIDRs\n*peering is non-transitive:\n**can't go from VPC1 through VPC2 to VPC3;\n**instead, must have direct peering VPC1-VPC3
+left side
+ * <b>VPC Endpoints\n*AWS services are available\nthrough public network\n*you can connect to AWS services\nusing your private network\ninstead of public network\n*useful if your resource \nhas no access to public network\n*only for resources in your AWS VPC;\ncan't be used from eg. Company Site VPN <<endpoint>>
+  * <b>VPC Endpoint Gateway\n*S3\n*DynamoDB <<endpoint>>
+  * <b>VPC Endpoint Interface\n*the other services <<endpoint>>
+ * <b>On Premise->AWS data center connection <<connection>>
+  * <b>Site to Site VPN\n*connect on-premise VPN to AWS\n*connection automatically encrypted\n*over public internet\n*takes minutes to establish <<connection>>
+  * <b> Direct Connect (DX)\n*physical secure connection to AWS\n*over private network\n*takes min a month to establish <<connection>>
+@endmindmap
