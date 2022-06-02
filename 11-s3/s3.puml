@@ -1,6 +1,6 @@
 @startmindmap mindmap
 
-title Route53 (DNS Registrar)
+title AWS S3
 
 <style>
 mindmapDiagram {
@@ -23,28 +23,30 @@ mindmapDiagram {
 </style>
 
 
-*[#Orange] <b>S3\nSimple Storage Service
- * Naming: s3://my-bucket/project/finder/server.bin
-  * Key: "project/finder/server.bin"
-   * Prefix:project/finder/
-   * Object name: server.bin
- * Bucket Versioning <<versioning>>
-  * Disabled -> Enabled:\n*Old files has version null\n*New (overwriting) files have version hash <<versioning>>
-  * Enabled -> Disabled:\n*Old files versions are kept\n*New (overwriting) files have version null <<versioning>>
- * Security <<security>>
-  * User based\n*IAM policy - Control from IAM console \nwhich API should be allowed for which IAM user <<security>>
-  * Resource based\n*Bucket Policies - Control from S3 console what IAM principals\ncan do with the bucket; cross-account access\n*Object Access Control List (ACL) - finer grain\n*Bucket Access Control List (ACL) - less common <<security>>
-  * so IAM principal can access S3 object if:\n*IAM principal has policy allowing access\n*OR S3 resource policy allows this specific principal <<security>>
+*[#Orange] <b>S3\n*Simple Storage Service\n*max object size is 5TB\n*upload in max 5GB parts\n*service is global\n*but buckets are regional
+ * <b>Naming</b>\ns3://my-bucket/project/finder/server.bin
+  * <b>Key:</b> "project/finder/server.bin"
+   * <b>Prefix:</b> project/finder/
+   * <b>Object name:</b> server.bin
+ * <b>Bucket Versioning <<versioning>>
+  * <b>Disabled -> Enabled:\n*Old files have version null\n*New (overwriting) files have version hash <<versioning>>
+  * <b>Enabled -> Disabled:\n*Old files versions are kept\n*New (overwriting) files have version null <<versioning>>
+ * <b>Security <<security>>
+  * <b>User based\n*IAM policy - Control from IAM console \nwhich API calls should be allowed for which IAM user <<security>>
+  * <b>Resource based\n*Bucket Policies - Control from S3 console what IAM principals\ncan do with the bucket; cross-account access\n*Object Access Control List (ACL) - finer grain\n*Bucket Access Control List (ACL) - less common <<security>>
+  * <b>IAM principal can access S3 object if:\n*IAM principal has policy allowing access\n*OR S3 resource policy allows this specific principal\n*AND in both cases there can be no explicit DENY <<security>>
+ * <b>Consistency in S3\n*Strong Consistency since December 2020\n*uploaded objects are immediately visible and gettable
 left side
- * Encryption <<encryption>>
-  * SSE-S3 (Server-Side Encryption - S3 managed)\n*Keys are generated & managed by AWS S3\n*Encryption is triggered when header is included in request\n*HTTP Header: "x-amz-server-side-encryption":"AES256" <<encryption>>
-  * SSE-KMS (Server-Side Encryption - KMS managed)\n*Uploaded keys are managed by AWS Key Management service\n*KMS Customer Master Key (CMK) is used for encryption\n*This gives control over who can use what key + audit trail\n*Encryption is triggered when header is included in request\n*HTTP Header: "x-amz-server-side-encryption":"aws:kms"<<encryption>>
-  * SSE-C (Server-Side Encryption - Customer)\n*AWS doesn't store the encryption keys\n*Here, HTTPS must be used as encryption key is attached in header\n*Key must be attached to every request as it is discarded\nright away after use\n*To retrieve the object - the same key must be attached in the header  <<encryption>>
-  * Client-side encryption\n*Client encrypts the file before sending <<encryption>>
- * CORS\nCross-Origin Resource Sharing <<cors>>
-  * Origin: Protocol + host + port:\nhttp://www.mateuszmidor.com:80 <<cors>>
-  * When visiting an Origin\nyou can request objects from other Origins\nonly if these objects allow such CORS requests <<cors>>
-  * Same origin:\n*http://www.mateuszmidor.com/blog\n*http://www.mateuszmidor.com/cv <<cors>>
-  * Different origin:\n*http://www.mateuszmidor.com\n*http://www.mateuszmidor.link <<cors>>
-  * WebBrowser does a pre-flight:\n*Request:\nOPTIONS /\nHost: www.mateuszmidor.link\nOrigin: http://www.mateuszmidor.com\n*Response:\nAccess-Control-Allow-Origin: http://www.mateuszmidor.com\nAccess-Control-Allow-Methods: GET, PUT, DELETE  <<cors>>
+ * <b>Encryption\n*all by default, or\n*selected objects <<encryption>>
+  * <b>SSE-S3 (Server-Side Encryption - S3 managed)\n*Keys are generated & managed by AWS S3\n*Encryption is triggered when header is included in request\n*HTTP Header: "x-amz-server-side-encryption":"AES256" <<encryption>>
+  * <b>SSE-KMS (Server-Side Encryption - KMS managed)\n*Uploaded keys are managed by AWS Key Management service\n*KMS Customer Master Key (CMK) is used for encryption\n*This gives control over who can use what key + audit trail\n*Encryption is triggered when header is included in request\n*HTTP Header: "x-amz-server-side-encryption":"aws:kms"<<encryption>>
+  * <b>SSE-C (Server-Side Encryption - Customer)\n*AWS doesn't store the encryption keys\n*Here, HTTPS must be used as encryption key is attached in header\n*Key must be attached to every request as it is discarded\nright away after use\n*To retrieve the object - the same key must be attached in the header  <<encryption>>
+  * <b>Client-side encryption\n*Client encrypts the file before sending <<encryption>>
+  * <b>In-transit (in-flight)\n*upload files using S3 HTTPS endpoint - SSL/TLS certificates\n*mandatory when using Server-Side Encryption-Customer\n**why? encryption keys are attached in http header<<encryption>>
+ * <b>CORS\nCross-Origin Resource Sharing <<cors>>
+  * <b>Origin: Protocol + host + port:\nhttp://www.mateuszmidor.com:80 <<cors>>
+  * <b>When visiting an Origin\nyou can request objects from other Origins\nonly if these objects allow such CORS requests <<cors>>
+  * <b>Same origin:\n*http://www.mateuszmidor.com/blog\n*http://www.mateuszmidor.com/cv <<cors>>
+  * <b>Different origin:\n*http://www.mateuszmidor.com\n*http://www.mateuszmidor.link <<cors>>
+  * <b>WebBrowser does a pre-flight:\n*Request:\nOPTIONS /\nOrigin: http://www.mateuszmidor.com [where you visit]\nHost: www.mateuszmidor.link [where resources are]\n*Response:\nAccess-Control-Allow-Origin: http://www.mateuszmidor.com\nAccess-Control-Allow-Methods: GET, PUT, DELETE  <<cors>>
 @endmindmap
