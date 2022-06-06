@@ -1,0 +1,28 @@
+@startmindmap mindmap
+
+title AWS CLI, SDK, IAM Roleas&Policies
+
+<style>
+mindmapDiagram {
+  .quotas {
+    BackgroundColor LightSkyBlue
+  }
+}
+</style>
+
+
+*[#Orange] <b>AWS CLI, SDK, IAM Roleas&Policies
+ * <b>Policies\n*policy can be attached directly to a User\n*or added to UserGroup\n*you can write policy as JSON document directly\n*or use a visual editor in AWS console\n*and then test the policy using policy simulator\n**//https:////policysim.aws.amazon.com//\n**it simulates against your current AWS account
+ * <b>CLI dry run commmands\n*some CLI commands allow //--dry-run// option\n    to just check   if command would succeed
+ * <b>aws sts decode-authorization-message\n*CLI command for decoding CLI auth error messages
+ * <b>EC2 instance metadata\n*curl http://169.254.169.254/latest/meta-data
+ * <b>AWS Profiles\n*$HOME/.aws/config & $HOME/.aws/credentials\n*> aws configure
+left
+ * <b>AWS Limits (Quotas) <<quotas>>
+  * <b>API Rate Limits\n*meaning: how many requests can we send per second\n*eg. limit for S3 GetObject is 5500 GET requests per sec\n*exceeding the limits causes throttling\n**use exponential backoff for intermittent errors\n**request quota limit increase for consistent errors <<quotas>>
+  * <b>Service Limits\n*how many resources of given type can we have\n*eg. limit for EC2 Standard Instances is 1152 vCPUs\n*to increase the limit:\n**open a customer support ticket\n**or use Service Quotas API <<quotas>>
+  * <b>ThrottlingException\n*AWS SDK has this implemented\n*usually means you should use Exponential Backoff\n*retrying the request is good only for:\n**throttling\n**5xx errors <<quotas>>
+ * <b>AWS CLI Credentials Provider Chain\n1. command line options: --profile, etc.\n2. environment variables:\n**AWS_ACCESS_KEY_ID\n**AWS_SECRET_ACCESS_KEY\n3. CLI credentials file:\n**$HOME/.aws/credentials\n4. CLI configuration file:\n**$HOME/.aws/config\n5. container credentials - for ECS tasks\n6. EC2 Instance Profile credentials\n**through attaching a role to an instance\n**this is how EC2 instance gets credentials to call AWS
+ * <b>Signature V4\n*http requests to AWS API have to be signed\n**exception: some requests to S3 don't have to\n*CLI and SDK does the signing for you\n**signature gets attached in http header\n**or in query string\n*SigV4 protocol is used for signing
+
+@endmindmap
