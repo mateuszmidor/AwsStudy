@@ -1,0 +1,40 @@
+@startmindmap mindmap
+
+title Docker in AWS
+
+<style>
+mindmapDiagram {
+  .scaling {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .service {
+    BackgroundColor LightSkyBlue
+  }
+  .placement {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>ECS, ECR, FarGate
+ * <b>ECS\nElastic Container Service\n2 launch types are available:\n*EC2 Launch Type\n*Fargate Launch Type 
+  * <b>Cluster\n*logical grouping of EC2 instances\n*it creates auto scaling group that manages the instances\n*each EC2 instance runs dedicated AMI\n*each EC2 instance runs ECS agent (docker container)\n*each EC2 has config /etc/ecs/ecs.config with eg. ECS_CLUSTER=cluster-demo,\nso the Agent knows into which cluster to register the EC2\n*ECS agent registers EC2 instance in the cluster
+  * <b>Task\n*defines Docker container: image and run parameters\n*task can have IAM assigned to it to manage AWS account\n*can have multiple containers (like Pod)
+  * <b>Service\n*runs selected task in multiple instances\n*like ReplicaSet\n*ensures that desired no of tasks is running <<service>>
+   * <b>Application Load Balancer\n*service can spawn multiple tasks\n*it can have assigned ALB to distribute load\namong tasks\n*exam question: routing from ALB\nto containers with dynamically assigned ports.\nYou specify container port mapping as \n host->container: random->80,\nselect ALB and it just works!\nNote: EC2 SG must allow inbount on all ports <<service>>
+  * <b>Auto scaling <<scaling>>
+   * <b>Service autoscaling (number of desired tasks)\n*CPU and RAM tracked in CloudWatch\n*Target Tracking - like in EC2 autoscaling group, track CPU or RAM\n*Step Scaling - based on CloudWatch alarms\n*Scheduled Scaling - calendar <<scaling>>
+   * <b>EC2 Auto Scaling (number of EC2 instances to run the tasks on)\n*ECS Service Scaling (Task level) != EC2 Auto Scaling (Instance level)\n**number of desired tasks vs number of available EC2 instances to run them on\n*it is much easier to setup Fargate Auto Scaling - because it is serverless\n**adds new EC2 instances automatically when needed\n*requires Cluster Capacity Provider to get new instances (Cluster's page) <<scaling>>
+left side
+ * <b>ECR - Elastic Container Registry\n*access is controlled by IAM\n*if you can't pull/push - update the IAM policy (an exam question)\nPush image - all steps are available in your ecr repository page under "View push commands":\n*aws ecr get-login-password --region us-east-1 | \n docker login -----username AWS --password-stdin 808768216571.dkr.ecr.us-east-1.amazonaws.com\n*docker build -t demo .\n*docker tag demo:latest 808768216571.dkr.ecr.us-east-1.amazonaws.com/demo:latest\n**tag so Docker can extract target registry url from the tag upon "push"\n*docker push 808768216571.dkr.ecr.us-east-1.amazonaws.com/demo:latest
+ * <b>Fargate - kind of serverless containers\n*run tasks without manually creating EC2 instances\n*you just specify amount vCPUs and RAM required for Task
+ * <b>IAM Roles for ECS:\n*ecsInstanceRole - attached to EC2 instance, allows ECS Agent to work by calling AWS API\n*ecsTaskExecutionRole - attached to each Task, allows Task to call AWS API like read container from ECR\n**this is what you mostlikely need for your containers to interact with AWS services\n*ecsServiceRole - allows the Service to register/deregister Instances in LoadBalancer, register/deregister Targets
+ * <b>Task Placement (EC2 clusters only)\nTask Placement Process:\n*find instance that has required CPU, RAM and ports to run the task\n*satisfy Task Placement Constraints\n*satisfy Task Placement Strategy <<placement>>
+  * <b>Strategies:\n*BinPack - use instance with least but enought resources\nto minimize number of required EC2 instance\n*Random - place tasks randomly\n*Spread - spread task instances eg. across Availability Zones <<placement>>
+  * <b>Constraints:\n*distinctInstance - place tasks on different instances\n*memberOf - place tasks on instances that match specified expression <<placement>>
+ * <b>ECS Data Volumes\n*EC2 + EBS, but when task moves to another EC2, data is missing\n*EC2 or Fargate + EFS NFS - shared volume for all instances\n*EC2 or Fargate + Bind Mounts - storage at specified host path,\nshared between containers in task, good for side car pattern\n*EC2 or Fargate + Docker - like Bind Mount,\nbut without specified host path (Docker unnamed volume)\n*S3 bucket can't be mounted as a volume
+@endmindmap
