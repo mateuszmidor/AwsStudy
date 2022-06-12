@@ -26,7 +26,7 @@ mindmapDiagram {
  * <b>Run WebServer <<run>>
   * <b>Go WebServer:\n*define main() in application.go\n*make server listen on port 5000\n*upload code as ZIP archive\n*EBS will: go build application.go <<run>>
   * <b>Dockerized WebServer:\n*define Dockerfile\n*make server listen on port 80\n*upload code as ZIP archive\n*EBS will: docker build . <<run>>
- * Deployment modes:\n*Single instance\n*High Availability with LoadBalancer, across AZs
+ * <b>Deployment modes:\n*Single instance\n*High Availability with LoadBalancer, across AZs
  * Lifecycle Policy\n*Beanstalk stores max 1000 application versions\n*lifecycle policy can be configured to trash versions\n*can trash based on upper version count limit or age\n*trashed version still remains in S3 unless configured otherwise
  * EBS - Docker
   * Single Docker Container\n*runs single container on EC2\n*you provide Dockerfile or Dockerrun.aws.json (image location)\n*no ECS is used, just plain Docker on EC2
