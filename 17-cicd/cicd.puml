@@ -1,0 +1,37 @@
+@startmindmap mindmap
+
+title CICD, CodeCommit, CodePipeline, CodeBuild, CodeDeploy
+
+<style>
+mindmapDiagram {
+  .migration {
+    BackgroundColor Pink
+  }
+  .orange {
+    BackgroundColor orange
+  }
+  .build {
+    BackgroundColor LightSkyBlue
+  }
+  .deploy {
+    BackgroundColor LightGreen
+  }
+}
+</style>
+
+
+*[#Orange] <b>CICD\n*CodeCommit - repository, like GitHub\n*CodeBuild - build and test code, like Jenkins\n*CodeDeploy - deploy to EC2/ECS/Lambda\n*CodePipeline - pipeline from push to deploy in eg. BeanStalk\n*CodeStar - automate CICD setup from above components\n*CodeArtifact - store, share and publish packages\n*CodeGuru - automated reviews using MachinLearning
+ * <b>CodeBuild\n*use custom docker image: "golang"\n*specify github credentials secret in Registry credential\n*build spec in buildspec.yml: cd src && go test ./...\n*by default runs outside default VPC,\nbut can be configured to be inside and access resources <<build>>
+  * <b>buildspec.yml\nMust be at the root of the code under build\nSections:\n*"env" - environment variables\n*"phases" - install, pre_build, build, post_build\n*"artifacts" - what to upload to S3\n*"cache" - files to cache in S3(usually dependencies ) <<build>>
+ * <b>CodeDeploy\n*used to deploy on EC2/ECS/Lambda\n*each target EC2 must be running CodeDeploy Agent\nthat is installed by you\n*and have Service Role for CodeDeploy assigned\n*deploy configuration - how to deploy instances: \n**One at a time, Half instances at a time, All at once, Custom\n*Deployment Group - set of EC2 instances with selected Tag\n*code deployment:\n**In place - deploy half instances, then second half\n**Blue-Green - deploy to a copy ASG, remove original ASG\n*rollback - create new deployment from old revision\nthat is known to be working <<deploy>>
+  * <b>components:\n*Application - unique name; a container for revision, deployment configuration etc\n*Compute Platform - EC2, On-premises, ECS or Lambda\n*Deployment Configuration\n**EC2, On-premises: minimum number of desired healthy instances\n**Lambda, ECS: how the traffic is routed to your updated versions\n*Deployment Group - group of tagged EC2 instances(eg. dev, test, prod)\n*Deployment Type:\n**In-Place - deploy in the same AutoScalingGroup\n**Blue-Green - create new AutoScalingGroup then destroy the old one, must use ELB\n*IAM Instance Profile - permissions for your EC2 instances to access S3, GitHub, etc\n*Application Revision - application code + appspec.yml\n*Service Role - IAM Role for CodeDeploy to work with EC2 instances, ASGs, ELBs\n*Target Revision - the revision you want to deploy to Deployment Group <<deploy>>
+  * <b>appspec.yml\n*lives in the root dir\n* "files" - source & destination paths for copying files\n*"hooks" - ApplicationStop, DownloadBundle, BeforeInstall,\nAfterInstall, ApplicationStart, ValidateService <<deploy>>
+  * <b>EC2 Agent install:\n #!/usr/bin/env bash\nyum update -y\nyum install -y ruby\nwget https://aws-codedeploy-eu-west-3.s3.eu-west-3.amazonaws.com/latest/install\nchmod +x ./install\n./install auto\nsystemctl status codedeploy-agent <<deploy>>
+left side
+ * <b>CodeCommit\n*Auth: SSH keys or HTTPS Git credentials\n**under IAM->Users (in AWS Console)
+ * <b>CodePipeline\n*orchestrate Code Commit/Build/Deploy\n*needs ServiceRole(IAM Role)\nto talk to Code Commit/Build/Deploy\n*single pipeline stage can have multiple action groups\n*single action group can have multiple actions
+ * <b>CodeStar\n* integrates CodeCommit, GitHub, CodeBuild, CodeDeploy,\nCloudFormation, CodePipeline, CloudWatch, ...\n*has integrations to Jira and GitHub issues\n*offers web-based IDE from Cloud9 for programming
+ * <b>CodeArtifact\n*for storing/fetching dependencies\n*also works as package proxy/cache for public repos\n*supports maven, npm, pip, NuGet and others
+ * <b>CodeGuru - powered by machine learning\n*CodeGuru Reviewer - reviews based on static code analysis: GitHub, BitBucket, CodeCommit\n*CodeGuru Profiler - performance recommendation based on runtime (live) measurements
+@endmindmap
+service codedeploy-agent status
