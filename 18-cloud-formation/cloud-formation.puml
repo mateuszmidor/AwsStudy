@@ -21,23 +21,23 @@ mindmapDiagram {
 
 
 *[#Orange] <b>CloudFormation\nInfrastructure as Code
- * Template\n*JSON or YAML describing resources\n*just like Kubernetes' YAML resources
-  * "Resources" - mandatory\n*this section is MANDATORY in the template\n*example resource: AWS::EC2::Instance
-  * "Parameters" - optional\n*customize template for reuse\n*Type:\n**String\n**Number\n**Comma-delimited list\n**List<Type>\n**AWS Parameter reference, eg.: VpcId: !Ref MyVPC\n*Description\n*Constraints\n*Defaults\n*Mappings (map of map of strings)\n**Item: !FindInMap[MapName, TopLevelKey, SecondLevelKey]
-  * "Outputs" - optional\n*define values outputted from the template\n*makes use of\n**Value: !Ref <MyResource>\n*can be exported so other stack can import it\n*Exporting template:\n   Export:\n     Name: <MyExportName>\n*Importing template:\n   Value: !ImportValue <MyExportName>
-  * "Conditions" - optional\n*to conditionally create resources, outputs, etc\n*operators: If, Equals, And, Or, Not\n*CreateCondition: !Equals [ !Ref EnvType, prod ]\n*, then reference it in resource:\n** Condition: CreateCondition
-  * Intrinsic functions <<functions>>
-   * Fn::Ref, or shorter: !Ref\n*for parameter - returns value\n*for resource - returns resource ID\n*example: !Ref EC2InstanceCount <<functions>>
-   * Fn::GetAtt\n*get resource's attribute\n*example: !GetAtt EC2Instance.Region <<functions>>
-   * Fn::FindInMap\n*get value from double level map\n*example: !FindInMap[CapitalsMap, Asia, Japan] <<functions>>
-   * Fn::ImportValue\n*import value that was exported from another template\n*example: !ImportValue SSHSecurityGroup <<functions>>
-   * Fn::Join\n*join values with delimiter\n*example: !Join[ ":",   [ a,b,c ] ] -> "a:b:c" <<functions>>
-   * Fn::Sub\n*substitute variable in string\n*like Python's f-strings\n*example: !Sub 'Location is ${AWS::Region}' <<functions>>
-   * Conditions\n*If, Equals, And, Or, Not\n*example: !Equals[!Ref: EnvType, prod] <<functions>>
+ * <b>Template\n*JSON or YAML describing resources\n*just like Kubernetes' YAML resources
+  * <b>"Resources" - mandatory\n*this section is MANDATORY in the template\n*example resource: AWS::EC2::Instance
+  * <b>"Parameters" - optional\n*customize template for reuse\n*Type:\n**String\n**Number\n**Comma-delimited list\n**List<Type>\n**AWS Parameter reference, eg.: VpcId: !Ref MyVPC\n*Description\n*Constraints\n*Defaults\n*Mappings (map of map of strings)\n**Item: !FindInMap[MapName, TopLevelKey, SecondLevelKey]
+  * <b>"Outputs" - optional\n*define values outputted from the template\n*makes use of\n**Value: !Ref <MyResource>\n*can be exported so other stack can import it\n*Exporting template:\n   Export:\n     Name: <MyExportName>\n*Importing template:\n   Value: !ImportValue <MyExportName>
+  * <b>"Conditions" - optional\n*to conditionally create resources, outputs, etc\n*operators: If, Equals, And, Or, Not\n*CreateCondition: !Equals [ !Ref EnvType, prod ]\n*, then reference it in resource:\n** Condition: CreateCondition
+  * <b>Intrinsic functions <<functions>>
+   * <b>Fn::Ref, or shorter: !Ref\n*for parameter - returns value\n*for resource - returns resource ID\n*example: !Ref EC2InstanceCount <<functions>>
+   * <b>Fn::GetAtt\n*get resource's attribute\n*example: !GetAtt EC2Instance.Region <<functions>>
+   * <b>Fn::FindInMap\n*get value from double level map\n*example: !FindInMap[CapitalsMap, Asia, Japan] <<functions>>
+   * <b>Fn::ImportValue\n*import value that was exported from another template\n*example: !ImportValue SSHSecurityGroup <<functions>>
+   * <b>Fn::Join\n*join values with delimiter\n*example: !Join[ ":",   [ a,b,c ] ] -> "a:b:c" <<functions>>
+   * <b>Fn::Sub\n*substitute variable in string\n*like Python's f-strings\n*example: !Sub 'Location is ${AWS::Region}' <<functions>>
+   * <b>Conditions\n*If, Equals, And, Or, Not\n*example: !Equals[!Ref: EnvType, prod] <<functions>>
 left side 
- * Rollbacks\n*stack create failure\n**by default everything is deleted\n**but can disable it and troubleshoot\nstack update failure\n**rollback to previous working version\n**can check errors in logs
- * CrossStacks\n*one stack Exports Output\n*another stack does !ImportValue ExportedValue\n*for stacks with different life cycles
- * StackSets\n*for stack reuse\n*eg. one VPC stack and many EC2 referencing it\n*update to root VPC updates all EC2 using it
- * CloudFormation drift\n*can check manual changes in some resources,\nie. changes introduced not by CloudFormation
+ * <b>Rollbacks\n*stack create failure\n**by default everything is deleted\n**but can disable it and troubleshoot\nstack update failure\n**rollback to previous working version\n**can check errors in logs
+ * <b>CrossStacks\n*one stack Exports Output\n*another stack does !ImportValue ExportedValue\n*for stacks with different life cycles
+ * <b>StackSets\n*for stack reuse\n*eg. create/update/delete a stack in multiple\nregions with a single operation\n*only admin account can create a StackSet
+ * <b>CloudFormation drift\n*can check manual changes in some resources,\nie. changes introduced not by CloudFormation
 @endmindmap
 
