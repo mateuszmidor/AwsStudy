@@ -21,7 +21,7 @@ mindmapDiagram {
 
 
 *[#Orange] <b>SQS, SNS, Kinesis\n*SQS - queue model\n*SNS - pub/sub model\n*Kinesis - real time streaming
- * Simple Queuing Service\n*producer-consumer\n*to decouple applications...\n*...or tiers: frontend from backend\n*unlimited messages in queue\n*message lives 4 days (max is 14)\n*latency: <10ms to send or receive\n*message size max 256KB\n*message can be delivered twice:\nso-called: at least once delivery\n*metric: ApproximateNumberOfMessages <<sqs>>
+ * <b>Simple Queuing Service\n*producer-consumer\n*to decouple applications...\n*...or tiers: frontend from backend\n*unlimited messages in queue\n*message lives 4 days (max is 14)\n*latency: <10ms to send or receive\n*message size max 256KB\n*message can be delivered twice:\nso-called: at least once delivery\n*metric: ApproximateNumberOfMessages <<sqs>>
   * SQS Security:\n*encryption\n*access control with IAM policies\n*SQS access policies (like in S3)\n**to allow access from other services eg. SNS, S3 eg.\nS3 send message on object created\n**to allow cross-account access <<sqs>>
   * SQS Message Visibility Timeout\n*when message is received by consumer,\nit becomes invisible for other consumes for default of 30 sec\n*if consumer doesn't process and delete the msg on time,\nit becomes visible and can be processed by other consumer\n*this means message being processed twice\n*to prevent this, use ChangeMessageVisibility API <<sqs>>
   * Special queues:\n*Dead Letter Queue - store messages that were received > ntimes\n*Delay Queue - message waits up to 15 minutes before being read <<sqs>>
