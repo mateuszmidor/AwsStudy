@@ -10,37 +10,46 @@ mindmapDiagram {
   .orange {
     BackgroundColor orange
   }
-  .xray {
+  .stages {
+    BackgroundColor Aquamarine
+  }
+  .integrations {
+    BackgroundColor LightSalmon
+  }
+  .security {
+    BackgroundColor LightGreen
+  }
+  .sockets {
     BackgroundColor LightSkyBlue
   }
-  .watch {
-    BackgroundColor LightGreen
+  .caching {
+    BackgroundColor LightSteelBlue
   }
 }
 </style>
 
 
 *[#Orange] <b>API Gateway
- * Integrations\n*call Lambda function\n**expose REAT api backed by Lambda\n*expose HTTP endpoint of the backend\n**add authorization, caching, rate limiting, ...\n*expose any AWS service\n**if it appears beneficial
- * Endpoint types\n*Edge-optimized - for global clients anywhere in the world, uses CloudFront\n*Regional - for clients ina single region, optionally uses CloudFront\n*Private - can only be accessed from VPC using interface VPC endpoint (ENI)
- * Stages\n*changes to API Gateway are not effective immediately\n*they must be deployed to stages, eg. v1,v2,v3, dev, test, prod\n*stages hold change history and can be rolled back
-  * Stage variables\n*like env variables but associated with stages\n*accessible from Lambda inside "context"\n*can also be used in:\n**Lambda function ARN\n**Lambda Aliases\n**HTTP endpoint\n**Parameter mapping templates\n*example of API Gateway target lambda using stage variables:\n**lambda-api-gateway-proxy-root-get:${stageVariables.lambdaAlias}\n**here stageVariables is built-in name, lambdaAlias is custom variable
- * Canary deployment using Stages\n*create stage "prod" and enable canary\n*configure 90% traffic to "prod" and rest to "canary"\n*from now on each deploy to "prod" will actually go to canary\n*you can click "promote" canary to be actual prod deployment 
- * Integration Types\n*Mock - respond without sending request to the backend\n*HTTP/AWS Lambda & services - optionally modify and forward request\n**must configure integration request&response\n**setup data mapping (using mapping templates) for request&response\n*AWS_PROXY (Lambda Proxy)\n**incoming request is the input to Lambda function\n**no data mapping , the function must deal with original request data\n*HTTP_PROXY\n**no data mapping\n**HTTP request is passed to the backend
-  * Mapping examples\n*convert JSON to XML to expose SOAP service as REST\n*rename query string parameters for backend
- * API Import/Export support\n*Swagger2\n*OpenAPI3\n*Postman
- * Caching\n*default TTL is 300s\n*caches are defined per stage\n**but can be overriden on method-level\n*cache can be encrypted\n*capacity 0.5-237GB\n*expensive - use only in production env
-  * Invalidation\n*flush entire cache from UI\n*invalidate entry with header:\n**Cache-Control: max-age=0\n**requires IAM authorization
- * Usage Plans & API Keys\n*you can decide who can call what stages\n*can also decide calls quota/month\n*can decide throttling above a max number of calls/second\n*provide the Plan API Key in http header: "X-API-Key"
- * Monitoring\n*CloudWatch logs\n*X-Ray - for distributed tracing\n*CloudWatch metrics\n**CacheHitCount, CacheMissCount\n**Count - total no of api calls\n**IntegrationLatency- how long it takes for backend to respond\n**Latency - how long it takes for entire API Gateway to respond\n**4xx error count, 5xx error count
- * API Gateway limits&throttling\n*gateweay response timeout is 29 seconds\n*soft limit of 10'000 requests/s across all APIs\n**429 Too many requests\n**can be increased upon request\n*can set Stage limit and Method limit for better quota granularity\n*or define Usage plans to limit per-customer
- * Enabling CORS for hitting lambdas through API Gateway\n*for non-proxy - use Actions in API Gateway->APIs->Resources menu\n*for proxy - add header in your lambda response
- * Security
-  * IAM Permissions\n*Authentication - IAM\n*Authorization - IAM Policy\n*uses "Sig v4" capability - IAM credentials in headers
-  * Resource Policies\n*who and how can use my API Gateway\n*allow for cross-account access (combined with IAM security)
-  * Cognito User Pools\n*for authentication\n*authorization done with API Gateway Methods
-  * Lambda Authorizer - a Lambda function\n*token based, eg. JWT or OAuth\n*or request based, eg. query string, headers\n*returns IAM Principal+IAM Policy that gets cached\n*authentication is external\n*authorizations is done by Lambda function
- * Integrations\n*REST\n*HTTP - poor and cheap version of REST\n*WebSocket  
- * WebSockets\n*opens persistent connection (creates connectionId)\n*enable two-way communication, eg. for chat\n*server can send message to client using **callback url**
-  * Routing\n*incoming message is routed using **route selection expression**\n**routing is based on selected field of the message (JSON format)\n**example: $request.body.action\n*if no routes -> send to $default
+ * <b>Integrations\n*Lambda function\n**expose REST api backend in Lambda\n*HTTP endpoint\n**add authorization, caching, rate limiting, ...\n*expose any AWS service\n**if it appears beneficial
+ * <b>Endpoint types\n*Edge-optimized - for global clients anywhere in the world, uses CloudFront\n*Regional - for clients ina single region, optionally uses CloudFront\n*Private - can only be accessed from VPC using interface VPC endpoint (ENI)
+ * <b>Stages\n*changes to API Gateway are not effective immediately\n*they must be deployed to stages, eg. v1,v2,v3, dev, test, prod\n*stages hold change history and can be rolled back <<stages>>
+  * <b>Stage variables\n*like env variables but associated with stages\n*accessible from Lambda inside "context"\n*can also be used in:\n**Lambda function ARN\n**Lambda Aliases\n**HTTP endpoint\n**Parameter mapping templates\n*example of API Gateway target lambda using stage variables:\n**lambda-api-gateway-proxy-root-get:${stageVariables.lambdaAlias}\n**here stageVariables is built-in name, lambdaAlias is custom variable <<stages>>
+ * <b>Canary deployment using Stages\n*create stage "prod" and enable canary\n*configure 90% traffic to "prod" and rest to "canary"\n*from now on each deploy to "prod" will actually go to canary\n*you can click "promote" canary to be actual prod deployment 
+ * <b>Integration Types\n*Mock - respond without sending request to the backend\n*HTTP/AWS Lambda & services - optionally modify and forward request\n**must configure integration request&response\n**setup data mapping (using mapping templates) for request&response\n*AWS_PROXY (Lambda Proxy)\n**incoming request is the input to Lambda function\n**no data mapping , the function must deal with original request data\n*HTTP_PROXY\n**no data mapping\n**HTTP request is passed to the backend <<integrations>>
+  * <b>Mapping examples\n*convert JSON to XML to expose SOAP service as REST\n*rename query string parameters for backend <<integrations>>
+ * <b>API Import/Export support\n*Swagger2\n*OpenAPI3\n*Postman
+ * <b>Caching\n*default TTL is 300s\n*caches are defined per stage\n**but can be overriden on method-level\n*cache can be encrypted\n*capacity 0.5-237GB\n*expensive - use only in production env <<caching>>
+  * <b>Invalidation\n*flush entire cache from UI\n*invalidate entry with header:\n**Cache-Control: max-age=0\n**requires IAM authorization <<caching>>
+ * <b>Usage Plans & API Keys\n*you can decide who can call what stages\n*can also decide calls quota/month\n*can decide throttling above a max number of calls/second\n*provide the Plan API Key in http header: "X-API-Key"
+ * <b>Monitoring\n*CloudWatch logs\n*X-Ray - for distributed tracing\n*CloudWatch metrics\n**CacheHitCount, CacheMissCount\n**Count - total no of api calls\n**IntegrationLatency- how long it takes for backend to respond\n**Latency - how long it takes for entire API Gateway to respond\n**so, Latency-IntegrationLatency = ApiGateway incurred delay(?)\n**4xx error count, 5xx error count
+ * <b>API Gateway limits&throttling\n*gateweay response timeout is 29 seconds\n*soft limit of 10'000 requests/s across all APIs\n**if one API is unlimited and throttled, all APIs will be throttled, like in Lambda Concurrency\n**429 Too many requests\n**can be increased upon request\n*can set Stage limit and Method limit for better quota granularity\n*or define Usage plans to limit per-customer
+ * <b>Enabling CORS for hitting lambdas through API Gateway\n*for non-proxy - use Actions in API Gateway->APIs->Resources menu\n*for proxy - add header in your lambda response\n**because proxy can't modify http request/response headers (nor anything else)
+ * <b>Security <<security>>
+  * <b>IAM Permissions\n*Authentication - IAM\n*Authorization - IAM Policy\n*uses "Sig v4" capability - IAM credentials in HTTP headers <<security>>
+  * <b>Resource Policies\n*who and how can use my API Gateway\n*allow for cross-account access (combined with IAM security) <<security>>
+  * <b>Cognito User Pools\n*for authentication\n*authorization done with API Gateway Methods <<security>>
+  * <b>Lambda Authorizer - a Lambda function\n*token based, eg. JWT or OAuth\n*or request based, eg. query string, headers\n*lambda returns IAM Principal+IAM Policy that gets cached\n*authentication is external\n*authorizations is done by Lambda function<<security>>
+ * <b>Integrations\n*REST\n*HTTP - poor and cheap version of REST\n**lambda proxy, http proxy, private integration\n**no data mappings\n**no usage plans\n**no API keys\n*WebSocket  
+ * <b>WebSockets\n*opens persistent connection (creates connectionId)\n*enable two-way communication, eg. for chat\n*server can send message to client using **callback url** <<sockets>>
+  * <b>Routing\n*incoming message is routed using **route selection expression**\n**routing is based on selected field of the message (JSON format)\n**example: $request.body.action\n*if no routes -> send to $default <<sockets>>
  @endmindmap
