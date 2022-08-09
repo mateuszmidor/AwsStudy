@@ -21,15 +21,16 @@ mindmapDiagram {
 
 
 *[#Orange] <b>Step Functions
- * Overview\n*model your workflow in form of a state machine\n*written in JSON
- * Task States\n*do some work in your state machine\n*eg invoke AWS Service:\n**run Lambda Function\n**run ECS task and wait for it to complete\n**run Batch job\n**insert data into DynamoDB\n**publish message to SNS or SQS\n**run another Step Function workflow\n*or run Activity:\n**EC2, ECS, on-premises
- * State types\n*Choice State - test a condition (branch)\n*Fail or Succeeded State - stop execution \n*Pass State - pass input/fixed data to output without doing any work\n*Wait State - insert a delay\n*Map State - dynamically iterate steps\n*Parallel State - begin parallel execution
- * Error handling:\n*Retry - retry failed state, eg network partition error\n*Catch - transition to failure path\n*when all Retries are used - we go to Catch section <<error>>
-  * Predefined error codes:\n*States.ALL - catch all errors\n*States.Timeout - task run longer than TimeoutSeconds,\n  or no heartbeat received\n*States.TaskFailed - execution failure\n*States.Permission - insufficient rights to execute code\n*user can define custom error  codes  <<error>>
- * "ResultPath"\n*it's a way to pass one step output as a next step input\n*eg when entering  failure path from Catch clause:\n   "ResultPath":  "$.error" - add error to next step input
- * Standard vs Express Step Functions <<express>>
-  * Standard\n*max duration - 1 year\n*can run up to 2000 functions per second\n*can do 4000 transitions per second\n*paid per-transition (more expensive)\n*exactly-once workflow execution semantics <<express>>
-  * Express\n*max duration - 5 minutes\n*can run up to 100'000 functions per second\n*can do almost unlimited transitions per second\n*paid per-execution, duration and memory (cheaper)\n*at least once workflow execution semantics <<express>>
- * AppSync\n*uses GraphQL to return exactly the data user needs\n*can combine returned data from many sources\n*integrates DynamoDB, Aurora, ElastiSearch and others\n*allow to retrieve data in real time with WebSockets or MQTT\n*replacement for Cognito Sync for devices data synchronization\n*requires uploading GraphQL schema <<appsync>>
-  * Authorize the app - 4 ways:\n*API_KEY\n*AWS_IAM\n* OPENID_CONNECT (JWT)\n*Amazon Cognito User Pools  <<appsync>>
+ * <b>Overview\n*model your workflow in form of a state machine\n*written in JSON
+ * <b>Task States\n*do some work in your state machine\n*eg invoke AWS Service:\n**run Lambda Function\n**run ECS task and wait for it to complete\n**run Batch job\n**insert data into DynamoDB\n**publish message to SNS or SQS\n**run another Step Function workflow\n*or run Activity:\n**EC2, ECS, on-premises
+ * <b>State types\n*Choice State - test a condition (branch)\n*Fail or Succeeded State - stop execution \n*Pass State - pass input/fixed data to output without doing any work\n*Wait State - insert a delay\n*Map State - dynamically iterate steps\n*Parallel State - begin parallel execution
+ * <b>Error handling:\n*Retry - retry failed state, eg network partition error\n*Catch - transition to failure path\n*when all Retries are used - we go to Catch section <<error>>
+  * <b>Predefined error codes:\n*States.ALL - catch all errors\n*States.Timeout - task run longer than TimeoutSeconds,\n  or no heartbeat received\n*States.TaskFailed - execution failure\n*States.Permission - insufficient rights to execute code\n*user can define custom error  codes  <<error>>
+ * <b>"ResultPath"\n*it's a way to pass one step output as a next step input\n*eg when entering  failure path from Catch clause:\n   "ResultPath":  "$.error" - add error to next step input
+ * <b>Standard vs Express Step Functions <<express>>
+  * <b>Standard\n*max duration - 1 year\n*can run up to 2000 functions per second\n*can do 4000 transitions per second\n*paid per-transition (more expensive)\n*exactly-once workflow execution semantics <<express>>
+  * <b>Express\n*max duration - 5 minutes\n*can run up to 100'000 functions per second\n*can do almost unlimited transitions per second\n*paid per-execution, duration and memory (cheaper)\n*at least once workflow execution semantics <<express>>
+ * <b>AppSync\n*uses GraphQL to return exactly the data user needs\n*can combine returned data from many sources\n*integrates DynamoDB, Aurora, ElastiSearch and others\n*allow to retrieve data in real time with WebSockets or MQTT\n*replacement for Cognito Sync for devices data synchronization\n*requires uploading GraphQL schema <<appsync>>
+  * <b>Authorize the app - 4 ways:\n*API_KEY\n*AWS_IAM\n* OPENID_CONNECT (JWT)\n*Amazon Cognito User Pools  <<appsync>>
+ * <b>Amplify\n*service that allows creating mobile and web applications\n(like BeanStalk, but for web and mobile)\n**Amplify Studio - IDE to build backend & frontend\n**Amplify CLI\n**Amplify Libraries - connect your app to AWS services\n**Amplify Hosting - a web hosting option  for your applications\n*Important features:\n**authentication using Cognito\n**data storage using AppSync+DynamoDB\n**hosting
 @endmindmap
