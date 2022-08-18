@@ -1,0 +1,4 @@
+2 Separate stacks with cross-reference: Network stack exports resources, WebApp stack imports them.
+
+Network stack: https://s3.amazonaws.com/cloudformation-examples/user-guide/cross-stack/SampleNetworkCrossStack.template
+WebAppp stack: https://s3.amazonaws.com/cloudformation-examples/user-guide/cross-stack/SampleWebAppCrossStack.template
