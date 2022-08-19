@@ -24,14 +24,16 @@ mindmapDiagram {
 
 
 *[#Orange] <b>Other Services
- * **SES - Simple Email Service**\n*allows to send/receive emails\n*integrated with IAM for sending emails
- * **Databases** <<databases>>
-  * **RDS - Relational Databases**\n*good for OLTP - Online Transaction Processing\n*PostgreSQL, MySQL, Oracle,...\n*Aurora + Aurora serverless\n*manually provisioned database, doesn't scale horizontally  <<databases>>
-  * **DynamoDB**\n*NoSQL database\n*managed\n*key-value, but can store documents up to 400KB\n*serverless\n*uses RCU and WCU (read/write capacity units)\n**can adjust RCU/WCU automatically (more expensive)  <<databases>>
-  * **ElastiCache**\n*in-memory\n*provisioned\n*Redis or Memcached used as storage\n*can cache data from other databases, HTTP queries or session data  <<databases>>
-  * **Redshift**\n*provisioned in advance\n*good for OLAP - Online Analytical Processing\n*data warehouse\n*data lake\n*analytics queries  <<databases>>
-  * **Neptune**\n*graph database  <<databases>>
-  * **DMS**\n*database migration service\n*when you need to move data between databases  <<databases>>
-  * **DocumentDB**\n*managed MongoDB for AWS  <<databases>>
- * **ACM - AWS Certificate Manager**\n*provision, manage and deploy SSL/TLS certificates\n*used for in-flight encryption for websites (HTTPS)
+ * <b>SES - Simple Email Service\n*allows to send/receive emails\n*integrated with IAM for sending emails
+ * <b>Databases** <<databases>>
+  * <b>RDS - Relational Databases\n*good for OLTP - Online Transaction Processing\n*PostgreSQL, MySQL, Oracle,...\n*Aurora + Aurora serverless\n*manually provisioned database, doesn't scale horizontally  <<databases>>
+  * <b>DynamoDB\n*NoSQL database\n*managed\n*key-value, but can store documents up to 400KB\n*serverless\n*uses RCU and WCU (read/write capacity units)\n**can adjust RCU/WCU automatically (more expensive)  <<databases>>
+  * <b>ElastiCache\n*in-memory\n*provisioned\n*Redis or Memcached used as storage\n*can cache data from other databases, HTTP queries or session data  <<databases>>
+  * <b>Redshift\n*provisioned in advance\n*good for OLAP - Online Analytical Processing\n*data warehouse\n*data lake\n*analytics queries  <<databases>>
+  * <b>Neptune\n*graph database  <<databases>>
+  * <b>DMS\n*database migration service\n*when you need to move data between databases  <<databases>>
+  * <b>DocumentDB\n*managed MongoDB for AWS  <<databases>>
+ * <b>ACM - AWS Certificate Manager\n*provision, manage and deploy SSL/TLS certificates\n*used for in-flight encryption for websites (HTTPS)
+ * <b>CloudMap\n*fully managed resource discovery service\n*allows to create a map of backend services available for frontend to use
+ * <b>Fault Injection Simulator (FIS)\n*based on Chaos Engineering\n*fully managed service for running fault injection experiments on AWS workloads
 @endmindmap
