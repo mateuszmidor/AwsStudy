@@ -1,3 +1,6 @@
+    # Resource-based policy to allow lambda invocation from another AWS account
+
+    ```json
     {
       "Sid": "Allow3dInvoke",
       "Effect": "Allow",
@@ -7,3 +10,4 @@
       "Action": "lambda:InvokeFunction",
       "Resource": "arn:aws:lambda:us-east-1:808768216571:function:demo-lambda-func"
     }
+    ```
