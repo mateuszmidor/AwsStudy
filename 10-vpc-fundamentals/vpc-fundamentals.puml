@@ -31,8 +31,8 @@ mindmapDiagram {
 
 *[#Orange] <b>VPC - Virtual Private Cloud\nRegional resource
  * <b>Subnet\n*Availability Zone resource\n*allow to partition the network in VPC\n*access to internet and between Subnets\n   is achieved through Route Tables\n*CIDR\n**Classless Inter-Domain Routing\n**describes Subnet's IP address range <<subnet>>
-  * <b>Public\n*has access from internet\n*has Route to Internet Gateway that allows access to/from internet <<type>>
-  * <b>Private\n*no access from internet\n*has Route To Nat Gateway that allows access to internet, not from  <<type>>
+  * <b>Public\n*has access from internet\n*has 0.0.0.0/0 Route to Internet Gateway that allows access to/from internet <<type>>
+  * <b>Private\n*no access from internet\n**no SSH connecting, no Instance Connect possible\n*has 0.0.0.0/0 Route To Nat Gateway that allows access to internet, not from\n*adding 0.0.0.0/0 -> Internet Gateway makes is Public!  <<type>>
   * <b>NACL - Network Access Control List\n*a firewall that controls traffic to/from subnet\n*one NACL per-subnet\n*has ALLOW and DENY rules\n*rules operate on IP addresses only\n*default NACL in a Subnet allows all traffic in and out <<access>>
   * <b>SG - Security Groups\n*attached to EC2/Elastic Network Interface\n*has ALLOW rules only\n*rules operate on IPs and other Security Groups <<access>>
  * <b>Flow Logs\n*captures information about all traffic\n   going into your interfaces:\n**VPC Flow Logs\n**Subnet Flow Logs\n**Elastic Network Interface Flow Logs\n*good for troubleshooting:\n**why my connection doesn't get through\n**including ELB, ElastiCache, Aurora, etc\n*logs can go to S3 or CloudWatch logs
