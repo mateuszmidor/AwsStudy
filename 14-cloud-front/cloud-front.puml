@@ -29,6 +29,7 @@ mindmapDiagram {
   * static data never changes so is always valid <<caching>>
   * dynamic data invalidated using:\n*headers\n*cookies\n*query string params <<caching>>
  * Invalidation\n*force CloudFront cache update immediately
+ * <b>Lambda@Edge\n*modify request to CDN or the origin\n*modify response from CDN or the origin
 left side
  * <b>Security <<security>>
   * <b>Geo Restriction\n*restrict who can access your CDN\n*access based on country - black list and white list\n*can be used to enforce CopyRight rules <<security>>
