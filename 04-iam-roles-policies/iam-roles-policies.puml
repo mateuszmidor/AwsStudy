@@ -29,6 +29,8 @@ mindmapDiagram {
   * Can be assigned a group, group has attached policies <<iam>>
   * Group only contains users, not other groups  <<iam>>
   * Can have directly attached policies <<iam>>
+  * Access Advisor - helps to identify unused roles <<iam>>
+  * Access Advisor - helps identify resources accessible form outside the account <<iam>>
  * Policy <<policy>>
   * Policy Generator\nhttps://awspolicygen.s3.amazonaws.com/policygen.html <<policy>>
   * Policy Simulator\nhttps://policysim.aws.amazon.com/home/index.jsp\n(Works on users/roles/groups in your currently logged-in account!) <<policy>>
@@ -42,7 +44,7 @@ mindmapDiagram {
   * EC2 On Demand instances - 1152 vCPUs;\nfor more need to open a ticket or use Quota API <<svc_limits>>
 left side
  * CLI\n*an alternative to Management Console and AWS SDK\n*default region is us-east-1 (North Virginia)\n*credentials lookup order: \ncmdline params, env variables, \~/.aws/credentials, \~/.aws/config, container credentials, instance profile credentials\n*some commands offer a dry run option to avoid creating expensive objects:\n<b>aws ec2 run-instances ----dry-run --instance-type t2.micro --image-id ami-04505e74c0741db8d
- * STS (Security Token Service)\n*decode error returned from --dry-run\n<b>aws sts decode-authorization-message --encoded-message UbtqyWqDeKvXqWxiUP5PWWGHwdOx...
+ * STS (Security Token Service)\n*decode error returned from --dry-run\n<b>aws sts decode-authorization-message --encoded-message UbtqyWqDeKvXqWxiUP5PWWGHwdOx...\n*allows to AssumeRole in foreign account
  * Instance metadata - information about instance itself\n*<b>curl http://169.254.169.254/latest/meta-data
  * CLI with MFA (Multi Factor Authentication)\n*first need to register your MFA device or Google Authenticator\n*then obtain access key, secret key and session token with:\n<b>aws sts get-session-token ...\n*then create dedicated profile with:\n<b>aws configure --profile=mfa\n*then use it\n<b>aws s3 ls --profile=mfa
  * API\n*HTTP requests towards AWS API are signed with your credentials\n(access key and secret key) using Signature V4 (SigV4)\nin either http header or URL string (eg. S3 pre-signed URL)
