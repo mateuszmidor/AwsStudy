@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        function run() {
+            hash = window.location.hash;
+            start = hash.indexOf("id_token");
+            end = hash.indexOf("&", start);
+            id_token = hash.substring(start+9, end)
+            document.getElementById("demo").innerHTML = id_token;
+          }
+   
+    </script>
+
+</head>
+<body onload="run()" >
+
+<h1>Cognito User Pools with implicit grant</h1>
+<p>Login response id_token:</p>
+<p id="demo">My first paragraph.</p>
+
+</body>
+</html> 

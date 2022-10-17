@@ -23,5 +23,5 @@ mindmapDiagram {
  * <b>Cognito Identity Pools (Federated Identity)\n*get identity  for users, so they can get temporary AWS credentials\n*integrate with Cognito User Pools as identity provider\n*can also use Google, Facebook, Amazon, Apple, SAML, OpenID, custom solutions\n*possible to allow guest (unauthenticated) user with guest credentials\n*user credentials are described by IAM policies\n**credentials can be customized based on user_id <<identity>>
   * <b>IAM Roles\n*default IAM roles for authenticated and guest users\n*define rules to choose role based on user_id <<identity>>
  * <b>Cognito Sync\n*synchronize data from device to Cognito\n*can store preferences, config, appplication state\n*store data in datasets, up to 1MB, up to 20 datasets\n*Cognito Streams - stream into Kinesis\n*Cognito Events - run Lambda\n*Push Sync - distribute update to devices\n*now it is replaced by newer AppSync
- * <b>Exam\n*User Pools vs Identity Pools\n**User Pools is for authentication\n**Identity Pools is for authorization
+ * <b>Exam\n*User Pools vs Identity Pools\n**User Pools is for authentication - User Directory\n**Identity Pools is for authorization
 @endmindmap
