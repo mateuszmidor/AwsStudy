@@ -47,7 +47,7 @@ mindmapDiagram {
  * <b>Security <<security>>
   * <b>IAM Permissions\n*Authentication - IAM\n*Authorization - IAM Policy\n*uses "Sig v4" capability - IAM credentials in HTTP headers <<security>>
   * <b>Resource Policies\n*who and how can use my API Gateway\n*allow for cross-account access (combined with IAM security) <<security>>
-  * <b>Cognito User Pools\n*for authentication\n*authorization done with API Gateway Methods <<security>>
+  * <b>Cognito User Pools\n*for authentication\n*authorization done with API Gateway Methods\n*IMPORTANT: this is API gateway, so cognito doesnt help with authorization to WWW content\n**request must provide bearer token in HTTP header but the browser will not send the token <<security>>
   * <b>Lambda Authorizer - a Lambda function\n*token based, eg. JWT or OAuth\n*or request based, eg. query string, headers\n*lambda returns IAM Principal+IAM Policy that gets cached\n*authentication is external\n*authorizations is done by Lambda function<<security>>
  * <b>Integrations\n*REST\n*HTTP - poor and cheap version of REST\n**lambda proxy, http proxy, private integration\n**no data mappings\n**no usage plans\n**no API keys\n*WebSocket  
  * <b>WebSockets\n*opens persistent connection (creates connectionId)\n*enable two-way communication, eg. for chat\n*server can send message to client using **callback url** <<sockets>>
