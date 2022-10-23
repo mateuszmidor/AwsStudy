@@ -7,11 +7,11 @@ sed "/${HEADER}/,$ d" -i README.md
 echo "${HEADER}" >> README.md
 
 # fill sections
-sections=$(find . -maxdepth 1 -type d ! -name '.*')
+sections=$(ls -d */) # list directories only
 for section_dir in $sections
 do
 	plantuml -tpng "$section_dir/*.puml"
-    section_header="${section_dir##*/}" # cut leading "./"
+    section_header="$section_dir"
     echo "Processing $section_header..."
     echo "## $section_header" >> README.md
 
