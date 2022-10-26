@@ -24,13 +24,13 @@ mindmapDiagram {
 
 
 *[#Orange] <b>cli, sdk, iam, roles, policies
- * IAM <<iam>>
+ * IAM (user)<<iam>>
   * Global service  <<iam>>
   * Can be assigned a group, group has attached policies <<iam>>
   * Group only contains users, not other groups  <<iam>>
   * Can have directly attached policies <<iam>>
   * Access Advisor - helps to identify unused roles <<iam>>
-  * Access Advisor - helps identify resources accessible form outside the account <<iam>>
+  * Access Analyzer - helps identify resources accessible form outside the account <<iam>>
  * Policy <<policy>>
   * Policy Generator\nhttps://awspolicygen.s3.amazonaws.com/policygen.html <<policy>>
   * Policy Simulator\nhttps://policysim.aws.amazon.com/home/index.jsp\n(Works on users/roles/groups in your currently logged-in account!) <<policy>>
