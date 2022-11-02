@@ -36,6 +36,7 @@ mindmapDiagram {
   * <b>Resource based\n*Bucket Policies - Control from S3 console what IAM principals\ncan do with the bucket; cross-account access\n*Object Access Control List (ACL) - finer grain\n*Bucket Access Control List (ACL) - less common <<security>>
   * <b>IAM principal can access S3 object if:\n*IAM principal has policy allowing access\n*OR S3 resource policy allows this specific principal\n*AND in both cases there can be no explicit DENY <<security>>
  * <b>Consistency in S3\n*Strong Object Consistency since December 2020\n**uploaded objects are immediately visible and gettable\n*Eventual Bucket Consistency - bucket can be still listed after being deleted
+ * <b>Static hosted website\n*needs public access from internet\n**unchecked Block all public access\n**defined Bucket policy allowing all Principals to GetObject\n*doesn't support https (unless behind CloudFront)
 left side
  * <b>Encryption\n*all by default, or\n*selected objects <<encryption>>
   * <b>SSE-S3 (Server-Side Encryption - S3 managed)\n*Keys are generated & managed by AWS S3\n*Encryption is triggered when header is included in request\n*HTTP Header: "x-amz-server-side-encryption":"AES256" <<encryption>>
