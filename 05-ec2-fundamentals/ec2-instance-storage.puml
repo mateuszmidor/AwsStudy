@@ -13,7 +13,7 @@ mindmapDiagram {
  * <b>Configuration:\n*Operating system\n*num vCPUs and RAM and Storage\n*Networking - speed & public IP\n*Firewall - security groups\n*Bootstrap script - User Data\n**runs as a root
  * <b>Instance Types:\n*General Purpose (eg. t2)\n*CPU Optimized (eg. c5)\n*Memory Optimized (eg. r5)\n*Storage Optimized (eg. d3)\n*Accelerated (GPU)\n*a number of special purpose types
  * <b>Purchasing options:\n*On-Demand Instances - short workload, pay by seconds\n*Reserverd Instances - 1 or 3 years, long workloads, cheaper per-second\n*Spot Instances - short workload, cheap but can lose instance\n*Savings Plan - pay fixed price per hour for any type of instance\n*Dedicated Server/Host - reserve entire physical server\n**grants access to actual hardware\n*Dedicated Instances - noone else will share your hardware\n*Capacity Reservations - just reserve On-Demand Instances; no billing discount
- left:
+left side
  * <b>Security Groups\n*firewall to EC2\n*deny traffic by default\n*define "allow" rules:\n**ip ranges + ports for inbound and outbound\n*can reference other Security Groups\n**eg. to allow traffic from LoadBalancer SG\n*blocked incoming traffic = <b>connection TIMEOUT
  * <b>SSH connection:\n*ssh -i KEY.pem ec2-user@instance_ip\n*Putty tool\n* EC2 Instance Connect (from AWS Management Console)
  * <b>EC2 Instance IAM Roles\n*user can attach IAM role to EC2\n*this allows EC2 instance to interact with AWS account\n*never do <i>aws configure...</i> on EC2 instance\n** whoever logs into such EC2, can steal your credentials
