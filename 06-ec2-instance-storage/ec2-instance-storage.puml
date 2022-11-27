@@ -15,7 +15,7 @@ mindmapDiagram {
  * <b>EBS vs EFS
   * <b>EBS\n*can be attached to only 1 EC2 instance at a time\n*bound to single Availability Zone\n*gp2: IO increases when volume size increases\n*io1: IO can be increased independently\n*to migrate to different Availability Zone:\n**take snapshot in source AZ\n**restore from snapshot in destination AZ\n*by default, root EBS volume is terminated\n   when owning EC2 instance is terminated\n*you pay for provisioned capacity
   * <b>EFS\n*can be mounted to 1000s of instances across AZ\n*good for sharing website files\n*can be only used with Linux(POSIX)\n*3x more expensive than EBS\n*can use EFS Infrequent Storage tier to save money\n*you pay only for used capacity
- left:
+ left side
  * <b>EBS - Elastic Block Store\n*EBS is a network drive attached to EC2\n*normally, one EBS can be attached to only one EC2\n*EBS lives in a specified Availability Zone (eg. us-east-1a)\n**can be copied & cloned in form of Snapshot to another AZ\n*can be detached from one EC2 and attached to another EC2 quickly\n*Delete on Termination flag - to delete EBS when EC2 terminates <<ebs>>
  * <b>EBS Snapshot\n*snapshot is a volume backup copy that can be copied to another AZ\n*Snapshot Archive - can store snapshots 75% cheaper\n**but it takes 24-72 hours to restore <<ebs>>
  * <b>AMI - Amazon Machine Image\n*image with your own OS, software, configuration\n**pre-configured image = faster boot up\n*AMI lives in a specified Region\n**can be copied to another Region\n*there is a AMI Marketplace - with free and paid AMIs
