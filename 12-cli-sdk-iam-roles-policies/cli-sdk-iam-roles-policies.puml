@@ -17,7 +17,7 @@ mindmapDiagram {
  * <b>aws sts decode-authorization-message\n*CLI command for decoding CLI auth error messages
  * <b>EC2 instance metadata\n*curl http://169.254.169.254/latest/meta-data
  * <b>AWS Profiles\n*$HOME/.aws/config & $HOME/.aws/credentials\n*> aws configure
-left
+left side
  * <b>AWS Limits (Quotas) <<quotas>>
   * <b>API Rate Limits\n*meaning: how many requests can we send per second\n*eg. limit for S3 GetObject is 5500 GET requests per sec\n*exceeding the limits causes throttling\n**use exponential backoff for intermittent errors\n**request quota limit increase for consistent errors <<quotas>>
   * <b>Service Limits\n*how many resources of given type can we have\n*eg. limit for EC2 Standard Instances is 1152 vCPUs\n*to increase the limit:\n**open a customer support ticket\n**or use Service Quotas API <<quotas>>
