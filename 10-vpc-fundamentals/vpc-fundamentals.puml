@@ -42,6 +42,6 @@ left side
   * <b>VPC Endpoint Gateway\n*S3\n*DynamoDB <<endpoint>>
   * <b>VPC Endpoint Interface\n*the other services <<endpoint>>
  * <b>On Premise->AWS data center connection <<connection>>
-  * <b>Site to Site VPN\n*connect on-premise VPN to AWS\n*connection automatically encrypted\n*over public internet\n*takes minutes to establish <<connection>>
+  * <b>Site to Site VPN\n*VPN is an encrypted tunnel from on-premises to AWS\n*connect on-premise VPN to AWS\n*connection automatically encrypted\n*over public internet\n*takes minutes to establish <<connection>>
   * <b> Direct Connect (DX)\n*physical secure connection to AWS\n*over private network\n*takes min a month to establish <<connection>>
 @endmindmap
