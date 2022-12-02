@@ -25,7 +25,7 @@ mindmapDiagram {
 
 *[#Orange] <b>Advanced S3\nSimple Storage Service
  * <b>Multi-part upload/download\n*multipart upload required if >5GB\n*multipart download possible,\ncan request arbitrary range of bytes
- * <b>S3 Select and Glacier Select\n*run simple SQL on CSV files\nfor filtering - to transfer less data
+ * <b>S3 Select and Glacier Select\n*run simple SQL on CSV/JSON/Apache Parquet files\nfor filtering - to transfer less data\n*supports GZIP and BZIP2 for CSV and JSON
  * <b>Event Notifications\n*S3:ObjectCreated\n*S3:ObjectRemoved\n*S3:Replication\n*allows filtering by object name\n*eg. to generate thumbnails\nof uploaded *.jpg images\nPossible notification targets:\n*SNS\n*SQS\n*Lambda\n*EventBridge\n**forward to 18 AWS services\n**filer by JSON rules\n**forward to multiple targets
  * <b>Storage Classes\nFrom most to least expensive per GB\nNote: can't gso back from Glacier;\nneed to copy and restore to Standard <<storage>>
   * Amazon S3 Standard - General Purpose\n*99.99% availability, 11-nines durability\n*for Big Data, mobile & gaming apps, content delivery\n*NO minimum storage duration<<storage>>
@@ -38,12 +38,12 @@ mindmapDiagram {
   * Amazon Glacier Deep Archive\n*even cheaper option\n*retrieval takes forever :)\n*minimum storage duration 180 days <<storage>>
    * Retrieval options:\n*Standard 12 hours\n*Bulk 48 hours <<storage>>
  * <b>Lifecycle rules\n*Transition actions - eg. move to\nStandard IA 3 weeks after creation,\n to Glacier 3 months later\n*Expiration actions - delete logs\nafter 365 days\n*can be created for specified prefix:\ns3://mybucket/logs/*\n*can be created for specified tags
- * <b>Performance\n*100-200ms response time\nQuotas:\n*3500 PUT, COPY, POST, DELETE\n*5500 GET, HEAD\n*quotas are defined per PREFIX\n*Service Quotas Console to increase\n*S3 Transfer acceleration\n**send data to edge location\n**forward to actual bucket location\n**compatible with multi-part upload\n**should speed up transfer
+ * <b>Performance\n*100-200ms response time\nQuotas:\n*3500 PUT, COPY, POST, DELETE\n*5500 GET, HEAD\n*quotas are defined per PREFIX\n*Service Quotas Console to increase\n*S3 Transfer acceleration\n**send data to edge location\n**forward to actual bucket location\n**compatible with multi-part upload\n**should speed up transfer\n** **bucket name must be DNS-compliant and must not contain periods (".")**
  left side
  * <b>MFA Delete\n*when enabled, permanent object delete (delete version) will require MFA (eg. using AWS CLI)\n*enabling MFA Delete requires AWS CLI cmd from root account\n*aws s3api put-bucket-versioning \ \n  --bucket s3-bucket-mfa-delete-demo \ \n  --versioning-configuration Status=Enabled,MFADelete=Enabled \ \n  --mfa "arn:aws:iam::808768216571:mfa/root-account-mfa-device 975814"\n*delete from CLI should work:\n  aws s3 rm s3://s3-bucket-mfa-delete-demo/beach.jpg 
  * <b>Bucket default encryption\n*used when user uploads file without selecting enctyption type
  * <b>S3 access logs\n*record all requests to S3, both allowed and denied\n*logs are stored in selected Logging S3 Bucket\n*don't monitor the Logging Bucket or it will explode :)
  * <b>Replication (bucket's Management tab)\n*requires versioning enabled in source and destination buckets\n*CRR - Cross Region Replication:\ncompliance, lower latency, replication across acounts\n*SRR - Same Region Replication:\nlog aggregation, live replication between test and prod accounts\n*after enabling only new objects will be replicated\n*can enable replication od DELETE (markers)\n*no replication chaining like:   bucket1 to bucket 2 then bucket 2 to bucket 3
  * <b>Pre-signed URLs for download and upload\nSetup:\n*aws configure set default.s3.signature_version s3v4\nGet download URL:\n*aws s3 presign s3://replication-study-replica-bucket/beach.jpg ------region eu-central-1 --expires-in 15
- * <b>Amazon Athena\n*query service to perform analytics against S3 objects\n*uses standard SQL language to query files\n*supported formats: CSV, JSON, ORC, Avro, Parquet\n*5$ per 1TB scanned data\n*Athena for S3 logs:\nhttps://aws.amazon.com/premiumsupport/knowledge-center/analyze-logs-athena/
+ * <b>Amazon Athena\n*query service to perform analytics against S3 objects\n*uses standard SQL language to query files\n*supported formats: CSV, JSON, ORC, Avro, Parquet\n*5$ per 1TB scanned data\n*more advanced but more expensive than S3 Select\n*Athena for S3 logs:\nhttps://aws.amazon.com/premiumsupport/knowledge-center/analyze-logs-athena/
  @endmindmap
