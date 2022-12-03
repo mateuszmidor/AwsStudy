@@ -23,7 +23,7 @@ mindmapDiagram {
 </style>
 
 
-*[#Orange] <b>S3\n*Simple Storage Service\n*max object size is 5TB\n*upload in max 5GB parts\n*service is global\n*but buckets are regional
+*[#Orange] <b>S3\n*Simple Storage Service\n*max 100 buckets per AWS account\n*max object size is 5TB\n*upload in max 5GB parts\n*service is global\n*but buckets are regional
  * <b>Naming</b>\ns3://my-bucket/project/finder/server.bin
   * <b>Key:</b> "project/finder/server.bin"
    * <b>Prefix:</b> project/finder/
