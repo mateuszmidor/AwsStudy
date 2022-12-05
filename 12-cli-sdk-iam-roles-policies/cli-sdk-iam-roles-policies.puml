@@ -11,8 +11,9 @@ mindmapDiagram {
 </style>
 
 
-*[#Orange] <b>AWS CLI, SDK, IAM Roleas&Policies
+*[#Orange] <b>AWS CLI, SDK, IAM Policies&Roles
  * <b>Policies\n*policy can be attached directly to a User\n*or added to UserGroup\n*you can write policy as JSON document directly\n*or use a visual editor in AWS console\n*and then test the policy using policy simulator\n**//https:////policysim.aws.amazon.com//\n**it simulates against your current AWS account
+ * <b>Roles\n*IAM Role is a collection of Policies,\n it is meant for assuming with sts-assume-role\n*doesn't relate to Users and UserGroups\n**can't be attached to them
  * <b>CLI dry run commmands\n*some CLI commands allow //--dry-run// option\n    to just check   if command would succeed
  * <b>aws sts decode-authorization-message\n*CLI command for decoding CLI auth error messages
  * <b>EC2 instance metadata\n*curl http://169.254.169.254/latest/meta-data
