@@ -24,12 +24,12 @@ mindmapDiagram {
  * <b>CDN\n*Content Delivery Network\n*content is cached at the network edge (>200edge points)\n**to minimize latency\n*has built-in DDoS protection\n*has integration with AWS Web Application Firewall\n*has integration with Shield(extra cache)\n*can expose external HTTPS endpoint\n*can directly talk to internal HTTPS backends
  * <b>CloudFront vs S3 Cross Region Replication\n*CloudFront is for static content,\n that needs to be available all around the world\n*S3 Cross Region Replication is for dynamic content,\n that needs to be available at low-latency in a few regions
  * <b>Origins\n*S3 bucket - use CDN for caching objects at the edge\n**close to client location\n*Custom Origin (HTTP)\n**Application Load Balancer\n**EC2 instance (must be public)\n**S3-hosted website\n**any HTTP backend you need
- * <b>OAI (for S3 access)\n*Origin Access Identity\n*assigned to your CloudFront distribution\n*attached to S3 bucket as a policy\n*S3 allows given OAI to access the buckets (as access policy)
+ * <b>OAI (for S3 access)\n*Origin Access Identity\n*used by CloudFront to authorize its requests towards S3\n*assigned to your CloudFront distribution\n*attached to S3 bucket as a policy\n*S3 allows given OAI to access the buckets (as access policy)
  * <b>Caching (distribution's Behavior and Invalidation tabs)\n*cached data lives at network edge\n*TTL controled by "Expires" header\n*common strategy: separate caching of static and dynamic data\n into separate Cloud Front distributions\n*can be invalidated manually by creating Invalidation in Console <<caching>>
   * static data never changes so is always valid <<caching>>
   * dynamic data invalidated using:\n*headers\n*cookies\n*query string params <<caching>>
- * Invalidation\n*force CloudFront cache update immediately
- * <b>Lambda@Edge\n*modify request to CDN or the origin\n*modify response from CDN or the origin
+ * <b>Invalidation\n*force CloudFront cache update immediately
+ * <b>Lambda@Edge\n*modify request to CDN or to the origin\n*modify response from CDN or from the origin
 left side
  * <b>Security <<security>>
   * <b>Geo Restriction\n*restrict who can access your CDN\n*access based on country - black list and white list\n*can be used to enforce CopyRight rules <<security>>
