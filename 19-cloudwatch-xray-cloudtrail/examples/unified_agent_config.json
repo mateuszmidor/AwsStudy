@@ -1,0 +1,45 @@
+// use this file during configuration of CloudWatch Unified Agent installed on EC2
+{
+    "agent": {
+        "metrics_collection_interval": 60,
+        "run_as_user": "root"
+    },
+    "logs": {
+        "logs_collected": {
+            "files": {
+                "collect_list": [
+                    {
+                        "file_path": "/FlightFinder/flight-finder.logs",
+                        "log_group_name": "FlightFinder",
+                        "log_stream_name": "FlightFinderStream",
+                        "retention_in_days": 3
+                    }
+                ]
+            }
+        }
+    },
+    "metrics": {
+        "metrics_collected": {
+            "disk": {
+                "measurement": [
+                    "used_percent"
+                ],
+                "metrics_collection_interval": 60,
+                "resources": [
+                    "*"
+                ]
+            },
+            "mem": {
+                "measurement": [
+                    "mem_used_percent"
+                ],
+                "metrics_collection_interval": 60
+            },
+            "statsd": {
+                "metrics_aggregation_interval": 60,
+                "metrics_collection_interval": 10,
+                "service_address": ":8125"
+            }
+        }
+    }
+}

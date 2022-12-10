@@ -1,0 +1,60 @@
+// Config: Metric "FindConnectionRequests" (a counter metric) exceeding value of 5 triggers Alarm, Alarm triggers SNS, SNS triggers Lambda
+// HandleCloudWatchAlarm lambda body:
+// import json
+// def lambda_handler(event, context):
+//     print("Event:", event)
+//
+// Logged event:
+Event: {
+    'Records': [
+        {
+            'EventSource': 'aws:sns', 
+            'EventVersion': '1.0', 
+            'EventSubscriptionArn': 'arn:aws:sns:us-east-1: 808768216571:CloudWatch_FlightFinder_WeArePopular:1ed3ed84-1246-433e-8412-b6680dc009b5', 
+            'Sns': {
+                'Type': 'Notification', 
+                'MessageId': 'd54a6974-5906-56a8-b24d-3290cb80200a', 
+                'TopicArn': 'arn:aws:sns:us-east-1: 808768216571:CloudWatch_FlightFinder_WeArePopular', 
+                'Subject': 'ALARM: "FlightFinderGettingPopular" in US East (N. Virginia)', 
+                'Message': '{
+                    "AlarmName": "FlightFinderGettingPopular",
+                    "AlarmDescription": "More than 5 requests per minute!",
+                    "AWSAccountId": "808768216571",
+                    "AlarmConfigurationUpdatedTimestamp": "2022-11-08T17:17:44.735+0000",
+                    "NewStateValue": "ALARM",
+                    "NewStateReason": "Threshold Crossed: 1 out of the last 1 datapoints [20.0 (08/11/22 17:21:00)] was greater than the threshold (5.0) (minimum 1 datapoint for OK -> ALARM transition).",
+                    "StateChangeTime": "2022-11-08T17:22:14.183+0000",
+                    "Region": "US East (N. Virginia)",
+                    "AlarmArn": "arn:aws:cloudwatch:us-east-1:808768216571:alarm:FlightFinderGettingPopular",
+                    "OldStateValue": "OK",
+                    "OKActions": [],
+                    "AlarmActions": [
+                        "arn:aws:sns:us-east-1:808768216571:CloudWatch_FlightFinder_WeArePopular"
+                    ],
+                    "InsufficientDataActions": [],
+                    "Trigger": {
+                        "MetricName": "FindConnectionRequests",
+                        "Namespace": "mateusz",
+                        "StatisticType": "Statistic",
+                        "Statistic": "SUM",
+                        "Unit": null,
+                        "Dimensions": [],
+                        "Period": 60,
+                        "EvaluationPeriods": 1,
+                        "DatapointsToAlarm": 1,
+                        "ComparisonOperator": "GreaterThanThreshold",
+                        "Threshold": 5.0,
+                        "TreatMissingData": "missing",
+                        "EvaluateLowSampleCountPercentile": ""
+                    }
+                }', 
+                'Timestamp': '2022-11-08T17: 22: 14.232Z', 
+                'SignatureVersion': '1', 
+                'Signature': 'YvSQRgJj9UP+zXIGxR+AnWpdvStn0ypl2m0JQzXykSUqVXbj/XRm2tdXfgCkikiTkB+q09Mo8s01rvm1wQMidTswzDevT6Eo6RL62vVIxqpVtfIhEZnOV52GUVIC6HFCK0gWQpgwigegW7oAhFWPGT1Wxf7se+dnonnGO8ckUDyyZTd9Q/n6rD5yCMUd25ZTYLCoqUJoDY4TQ1RUn6NfT9edHS2BLTCY9GiBO2bujrbTnculLyXAYcdi2vQSD00FDP3sl6QXfJ/EdRLxmGckkJohltNNYo7SplpT0CBAHQNIkDVvkBeU+v8Sv84Q6KyMjxNIAEmajsI7lAraoyJN8g==', 
+                'SigningCertUrl': 'https: //sns.us-east-1.amazonaws.com/SimpleNotificationService-56e67fcb41f6fec09b0196692625d385.pem', 
+                'UnsubscribeUrl': 'https: //sns.us-east-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-east-1:808768216571:CloudWatch_FlightFinder_WeArePopular:1ed3ed84-1246-433e-8412-b6680dc009b5',
+                'MessageAttributes': {}
+            }
+        }
+    ]
+}
