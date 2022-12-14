@@ -28,7 +28,7 @@ mindmapDiagram {
   * <b>appspec.yml\n*lives in the root dir\n* "files" - source & destination paths for copying files\n*"hooks" - ApplicationStop, DownloadBundle, BeforeInstall,\nAfterInstall, ApplicationStart, ValidateService <<deploy>>
   * <b>EC2 Agent install:\n #!/usr/bin/env bash\nyum update -y\nyum install -y ruby\nwget https://aws-codedeploy-eu-west-3.s3.eu-west-3.amazonaws.com/latest/install\nchmod +x ./install\n./install auto\nsystemctl status codedeploy-agent <<deploy>>
 left side
- * <b>CodeCommit\n*Auth: SSH keys or HTTPS Git credentials\n**under IAM->Users (in AWS Console)
+ * <b>CodeCommit\nAuthentication:\n*with SSH keys (not visible in AWS root account):\n**upload your SSH public key to AWS IAM User\n*with HTTPS Git credentials:\n**add: IAM->Users->Security credentials (in AWS Console)\n**then store locally in $HOME/.git-credentials\n***entry format:<i>https://user:token@codecommit_repo_url\n**ensure entry in $HOME/.gitconfig:\n     [credential]\n  \thelper = store
  * <b>CodePipeline\n*orchestrate Code Commit/Build/Deploy\n*needs ServiceRole(IAM Role)\nto talk to Code Commit/Build/Deploy\n*single pipeline stage can have multiple action groups\n*single action group can have multiple actions
  * <b>CodeStar\n* integrates CodeCommit, GitHub, CodeBuild, CodeDeploy,\nCloudFormation, CodePipeline, CloudWatch, ...\n*has integrations to Jira and GitHub issues\n*offers web-based IDE from Cloud9 for programming
  * <b>CodeArtifact\n*for storing/fetching dependencies\n*also works as package proxy/cache for public repos\n*supports maven, npm, pip, NuGet and others
