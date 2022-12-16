@@ -30,12 +30,15 @@ mindmapDiagram {
    * <b>Fn::Ref, or shorter: !Ref\n*for parameter - returns value\n*for resource - returns resource ID\n*example: !Ref EC2InstanceCount <<functions>>
    * <b>Fn::GetAtt\n*get resource's attribute\n*example: !GetAtt EC2Instance.Region <<functions>>
    * <b>Fn::FindInMap\n*get value from double level map\n*example: !FindInMap[CapitalsMap, Asia, Japan] <<functions>>
+   * <b>Fn::Select\n*get value from array by 0-based index\n*example: !Select [ "1", [ "apples", "grapes", "oranges" ] ]\n**result: "grapes" <<functions>>
+   * <b>Fn::Length\n*get array's length\n*example: !Length [ "apples", "grapes", "oranges" ] <<functions>>
    * <b>Fn::ImportValue\n*import value that was exported from another template\n*example: !ImportValue SSHSecurityGroup <<functions>>
    * <b>Fn::Join\n*join values with delimiter\n*example: !Join[ ":",   [ a,b,c ] ] -> "a:b:c" <<functions>>
+   * <b>Fn::Split\n*split string into array\n*example: !Split [ "|" , "a|b|c" ]] -> ["a", "b", "c"] <<functions>>
    * <b>Fn::Sub\n*substitute variable in string\n*like Python's f-strings\n*example: !Sub 'Location is ${AWS::Region}' <<functions>>
    * <b>Conditions\n*If, Equals, And, Or, Not\n*example: !Equals[!Ref: EnvType, prod] <<functions>>
 left side 
- * <b>Rollbacks\n*stack create failure\n**by default everything is deleted\n**but can disable it and troubleshoot\nstack update failure\n**rollback to previous working version\n**can check errors in logs
+ * <b>Rollbacks\n*enabled by default\n*stack create failure\n**by default everything is deleted\n**but can disable it and troubleshoot\n*stack update failure\n**rollback to previous working version\n**can check errors in logs
  * <b>CrossStacks\n*one stack Exports Output\n*another stack does !ImportValue ExportedValue\n*for stacks with different life cycles
  * <b>StackSets\n*for stack reuse\n*eg. create/update/delete a stack in multiple\nregions with a single operation\n*only admin account can create a StackSet
  * <b>CloudFormation drift\n*can check manual changes in some resources,\nie. changes introduced not by CloudFormation
