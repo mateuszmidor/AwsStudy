@@ -58,6 +58,6 @@ mindmapDiagram {
  * <b>Lambda versions and aliases <<versions>>
   * <b>Versions\n*each Deploy creates new, immutable version\n*version = code + configuration<<versions>>
   * <b>Aliases\n*alias is a pointer to specific Lambda version\n**eg. "$Latest"\n*can point to 2 versions with weights\n**this enables Blue\Green deployments by routing X% of traffic to given aliases\n*alias gets it's own ARN\n*alias can't reference other alias\n*alias is mutable - can be updated to point to a different version<<versions>>
- * <b>Lambda and CodeDeploy\n*CodeDeploy can upgrade lambda to a new version\n*it will smoothly route traffic from old to new version until 100% is reached
+ * <b>Lambda and CodeDeploy\n*CodeDeploy can upgrade lambda to a new version. Strategies:\n**Linear10PercentEvery3Minutes - smooth transition, switch additional 10% every 3 minutes\n**Linear10PercentEvery10Minutes\n**Canary10Percent5Munutes - try 10% for 5 minutes, then switch all traffic to new version\n**Canary10Percent30Munutes\n**AllAtOnce - just switch all traffic to new version immediately
  * <b>Lambda limits\n*limits are per-region\n*RAM: configurable 128MB - 10GB, more memory->more vcpus\n*max execution time: 15minutes\n*environment variables: total of 4KB data\n*/tmp folder: 512MB (part of execution environment)\n*concurrent executions: 1000\n*max compressed deployment ZIP: 50MB\n*max uncompressed deployment: 250MB
 @endmindmap

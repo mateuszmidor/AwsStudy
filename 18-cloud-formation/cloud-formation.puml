@@ -26,6 +26,7 @@ mindmapDiagram {
   * <b>"Parameters" - optional\n*customize template for reuse\n*Type:\n**String\n**Number\n**Comma-delimited list\n**List<Type>\n**AWS Parameter reference, eg.: VpcId: !Ref MyVPC\n*Description\n*Constraints\n*Defaults\n*Mappings (map of map of strings)\n**Item: !FindInMap[MapName, TopLevelKey, SecondLevelKey]
   * <b>"Outputs" - optional\n*define values outputted from the template\n*makes use of\n**Value: !Ref <MyResource>\n*can be exported so other stack can import it\n*Exporting template:\n   Export:\n     Name: <MyExportName>\n*Importing template:\n   Value: !ImportValue <MyExportName>
   * <b>"Conditions" - optional\n*to conditionally create resources, outputs, etc\n*operators: If, Equals, And, Or, Not\n*CreateCondition: !Equals [ !Ref EnvType, prod ]\n*, then reference it in resource:\n** Condition: CreateCondition
+  * <b>CloudFormation Lambda inline\n*for Node.js and Python only\n*place function code under LambdaFunction.Properties.Code.ZipFile
   * <b>Intrinsic functions <<functions>>
    * <b>Fn::Ref, or shorter: !Ref\n*for parameter - returns value\n*for resource - returns resource ID\n*example: !Ref EC2InstanceCount <<functions>>
    * <b>Fn::GetAtt\n*get resource's attribute\n*example: !GetAtt EC2Instance.Region <<functions>>

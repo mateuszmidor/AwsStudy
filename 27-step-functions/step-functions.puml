@@ -26,7 +26,10 @@ mindmapDiagram {
  * <b>State types\n*Choice State - test a condition (branch)\n*Fail or Succeeded State - stop execution \n*Pass State - pass input/fixed data to output without doing any work\n*Wait State - insert a delay\n*Map State - dynamically iterate steps\n*Parallel State - begin parallel execution
  * <b>Error handling:\n*Retry - retry failed state, eg network partition error\n*Catch - transition to failure path\n*when all Retries are used - we go to Catch section <<error>>
   * <b>Predefined error codes:\n*States.ALL - catch all errors\n*States.Timeout - task run longer than TimeoutSeconds,\n  or no heartbeat received\n*States.TaskFailed - execution failure\n*States.Permission - insufficient rights to execute code\n*user can define custom error  codes  <<error>>
- * <b>"ResultPath"\n*it's a way to pass one step output as a next step input\n*eg when entering  failure path from Catch clause:\n   "ResultPath":  "$.error" - add error to next step input
+ * <b>"InputPath"\n*filters input data from incoming JSON to Lambda (select just some fields) 
+ * <b>"Parameters"\n*additional fixed input for Lambda
+ * <b>"ResultPath"\n*it's a way to pass one step output as a next step input\n*can combine Lambda output with the input for debugging\n*eg when entering  failure path from Catch clause:\n   "ResultPath":  "$.error" - add error to next step input
+ * <b>"OutputPath"\n*filter data from ResultPath (select just some fields)
  * <b>Standard vs Express Step Functions <<express>>
   * <b>Standard\n*max duration - 1 year\n*can run up to 2000 functions per second\n*can do 4000 transitions per second\n*paid per-transition (more expensive)\n*exactly-once workflow execution semantics <<express>>
   * <b>Express\n*max duration - 5 minutes\n*can run up to 100'000 functions per second\n*can do almost unlimited transitions per second\n*paid per-execution, duration and memory (cheaper)\n*at least once workflow execution semantics <<express>>
