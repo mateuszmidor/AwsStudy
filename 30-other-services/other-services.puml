@@ -25,7 +25,7 @@ mindmapDiagram {
 
 *[#Orange] <b>Other Services
  * <b>SES - Simple Email Service\n*allows to send/receive emails\n*integrated with IAM for sending emails
- * <b>Databases** <<databases>>
+ * <b>Databases <<databases>>
   * <b>RDS - Relational Databases\n*good for OLTP - Online Transaction Processing\n*PostgreSQL, MySQL, Oracle,...\n*Aurora + Aurora serverless\n*manually provisioned database, doesn't scale horizontally  <<databases>>
   * <b>DynamoDB\n*NoSQL database\n*managed\n*key-value, but can store documents up to 400KB\n*serverless\n*uses RCU and WCU (read/write capacity units)\n**can adjust RCU/WCU automatically (more expensive)  <<databases>>
   * <b>ElastiCache\n*in-memory\n*provisioned\n*Redis or Memcached used as storage\n*can cache data from other databases, HTTP queries or session data  <<databases>>
@@ -36,4 +36,5 @@ mindmapDiagram {
  * <b>ACM - AWS Certificate Manager\n*provision, manage and deploy SSL/TLS certificates\n*used for in-flight encryption for websites (HTTPS)
  * <b>CloudMap\n*fully managed resource discovery service\n*allows to create a map of backend services available for frontend to use
  * <b>Fault Injection Simulator (FIS)\n*based on Chaos Engineering\n*fully managed service for running fault injection experiments on AWS workloads
+ * <b>DataSync\n*move large amounts of data to AWS (to EFS, S3, FSx - windows)\n**on-premises or other cloud -> AWS (needs aws agent running in src infrastructure)\n**AWS -> AWS (between storage services, no agent needed)\n*can move data periodically eg every 7 days - schedule\n*file permissions and metadata are preserved\n**exam question: how to transfer files together with metadata?
 @endmindmap
