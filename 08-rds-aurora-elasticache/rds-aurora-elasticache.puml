@@ -25,6 +25,7 @@ mindmapDiagram {
   * <b>Optional logs sent to CloudWatch:\n**Audit Log\n**Error Log\n**General Log\n**Slow query log - which queries took longest time to execute <<rds>>
   * <b>Enhanced Monitoring in RDS\n*out of the box %CPU, %MEM per process for given DB VM\n*DB VM has Agent running and pushing the metrics<<rds>>
  * <b>Amazon Aurora\n*backed by MySQL or Postgres\n*cloud-optimized\n**5x faster than MySQL on RDS, 3x faster than Postgres on RDS\n*it's storage grows automatically in increments of 10GB up to 128TB\n*possible to have up to 15 replicas (other RDS databases - max 5 replicas)\n*failover to standby instance is instantaneous, much faster than other RDS databases\n*High Availability - 6 copies living in 3 Availability Zones\n*Writer Endpoint (URL) - always points to master, even right after failover\n*Reader Endpoint (URL) - points to loadbalancer of read replicas\n*Aurora Security is the same as RDS security
+ * <b>Amazon RDS Proxy\n**fully managed database proxy\n**allows apps to use DB connections pool\n***very useful for hunderds of lambdas opening connections to RDS\n**reduces failover to standby replica time by up to 66%\n**can enforce authentication with IAM\n**supports MySql, PostgreSql, MariaDB, Aurora\n**only accessible within VPC, never from internet
  * <b>ElastiCache<< elasticache>>
   * <b>Overview\n*backed by Redis or Memcached\n*in-memory database with high performance and low latency\n*reduces read-related workload from databases\n*using cache requires heavy changes in application code<< elasticache>>
    * <b>Redis\n*multi-AZ with failover\n*read replicas\n*data persistence\n*backups\n*mostly single threaded << elasticache>>
@@ -34,4 +35,5 @@ mindmapDiagram {
    * <b>Write-Through\n*update cache when database is updated\n*data is never stale\n*but each write requires 2 calls (db and cache)\n*a lot of cached data will never be used << elasticache>>
   * <b>Data Eviction and Time To Live (TTL) \n*evictions - 3 ways:\n**cache entries can be deleted manually\n**Least Recently Used entry is deleted when storage is running low\n**Time To Live is up, then entry is deleted<< elasticache>>
   * <b>Replication\n*Cluster Mode disabled\n**1 primary node for writing, up to 5 read replicas\n*Cluster Mode enabled\n**data partitioned across shards to scale writes\n**up to 500 nodes per cluster<< elasticache>>
+ * <b>Amazon MemoryDB for Redis\n**redis-compatible API, durable in-memory database\n**ultra-fast performance over 160 millions reqests per second\n**durable, multi-AZ with transaction log\n**scales to 100s of TBs of storage\n**good for web applications, online games, media streaming
 @endmindmap
