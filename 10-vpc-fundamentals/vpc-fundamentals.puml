@@ -39,8 +39,8 @@ mindmapDiagram {
  * <b>VPC Peering\n*connect 2 VPCs privately using AWS network\n*make them behave as they were in the same network\n*VPCs must have non-overlaping CIDRs\n*peering is non-transitive:\n**can't go from VPC1 through VPC2 to VPC3;\n**instead, must have direct peering VPC1-VPC3
 left side
  * <b>VPC Endpoints\n*AWS services are available\nthrough public network\n*you can connect to AWS services\nusing your private network\ninstead of public network\n*useful if your resource \nhas no access to public network\n*only for resources in your AWS VPC;\ncan't be used from eg. Company Site VPN <<endpoint>>
-  * <b>VPC Endpoint Gateway\n*S3\n*DynamoDB <<endpoint>>
-  * <b>VPC Endpoint Interface\n*the other services <<endpoint>>
+  * <b>VPC Endpoint Gateway\nLives outside your VPC\n*access to S3\n*access to DynamoDB <<endpoint>>
+  * <b>VPC Endpoint Interface\nLives inside your VPC\n*access to the other services <<endpoint>>
  * <b>On Premise->AWS data center connection <<connection>>
   * <b>Site to Site VPN\n*VPN is an encrypted tunnel from on-premises to AWS\n*connect on-premise VPN to AWS\n*connection automatically encrypted\n*over public internet\n*takes minutes to establish <<connection>>
   * <b> Direct Connect (DX)\n*physical secure connection to AWS\n*over private network\n*takes min a month to establish <<connection>>
