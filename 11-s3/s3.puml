@@ -49,5 +49,5 @@ left side
   * <b>When visiting an Origin\nyou can request objects from other Origins\nonly if these objects allow such CORS requests <<cors>>
   * <b>Same origin:\n*http://www.mateuszmidor.com/blog\n*http://www.mateuszmidor.com/cv <<cors>>
   * <b>Different origin:\n*http://www.mateuszmidor.com\n*http://www.mateuszmidor.link <<cors>>
-  * <b>WebBrowser does a pre-flight:\n*Request:\nOPTIONS /\nOrigin: http://www.mateuszmidor.com [where you visit]\nHost: www.mateuszmidor.link [where resources are]\n*Response:\nAccess-Control-Allow-Origin: http://www.mateuszmidor.com\nAccess-Control-Allow-Methods: GET, PUT, DELETE  <<cors>>
+  * <b>WebBrowser does a pre-flight:\n*Request:\n  OPTIONS /\n  Origin: http://www.mateuszmidor.com [site that you open]\n  Host: www.mateuszmidor.link [site where the first site references resources]\n*Response:\n  Access-Control-Allow-Origin: http://www.mateuszmidor.com\n  Access-Control-Allow-Methods: GET, PUT, DELETE  <<cors>>
 @endmindmap
