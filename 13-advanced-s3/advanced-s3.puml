@@ -16,9 +16,6 @@ mindmapDiagram {
   .storage {
     BackgroundColor LightSkyBlue
   }
-  .cors {
-    BackgroundColor LightGreen
-  }
 }
 </style>
 
@@ -46,4 +43,5 @@ mindmapDiagram {
  * <b>Replication (bucket's Management tab)\n*requires versioning enabled in source and destination buckets\n*CRR - Cross Region Replication:\ncompliance, lower latency, replication across acounts\n*SRR - Same Region Replication:\nlog aggregation, live replication between test and prod accounts\n*after enabling only new objects will be replicated\n*to replicate old objects - use Batch Replication\n*can enable replication of DELETE (markers)\n*no replication chaining like:   bucket1 to bucket 2 then bucket 2 to bucket 3
  * <b>Pre-signed URLs for download and upload\nSetup:\n*aws configure set default.s3.signature_version s3v4\nGet download URL:\n*aws s3 presign s3://replication-study-replica-bucket/beach.jpg ------region eu-central-1 --expires-in 15
  * <b>Amazon Athena\n*query service to perform analytics against S3 objects\n*uses standard SQL language to query files\n*supported formats: CSV, JSON, ORC, Avro, Parquet\n*5$ per 1TB scanned data\n*more advanced but more expensive than S3 Select\n*Athena for S3 logs:\nhttps://aws.amazon.com/premiumsupport/knowledge-center/analyze-logs-athena/
+ * <b>Access Points\n*define Access Point that represents a list of prefixes inside a bucket\n*attach Resource Based Access Policy to such Access Point\n*give the user Access Point DNS, instead of Bucket DNS\n*this simplifies managing access control inside bucket\n**you define access policies per-Access Point, instead per entire Bucket
  @endmindmap
