@@ -1,0 +1,36 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-east-1",
+            "eventTime": "2025-10-04T09:39:25.594Z",
+            "eventName": "ObjectRemoved:Delete",
+            "userIdentity": {
+                "principalId": "AWS:AIDATHOQ4MSHYZJXO47JQ"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "37.31.138.10"
+            },
+            "responseElements": {
+                "x-amz-request-id": "ZS0HEH3CV6KP6A54",
+                "x-amz-id-2": "/yjL4XnWKS2R9dVKxwAFNywvSmJfyYEyP3IyUIZhy35okAmmkLG/cUYFcjVWbSjsDU64yNR55Frlo4XMbICcYcIC4Zcw3zNm"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "FileDeleted",
+                "bucket": {
+                    "name": "mateuszmidor-photo-album",
+                    "ownerIdentity": {
+                        "principalId": "A2WNFG3H52EQ82"
+                    },
+                    "arn": "arn:aws:s3:::mateuszmidor-photo-album"
+                },
+                "object": {
+                    "key": "image.jpeg",
+                    "sequencer": "0068E0EB4D936FB850"
+                }
+            }
+        }
+    ]
+}

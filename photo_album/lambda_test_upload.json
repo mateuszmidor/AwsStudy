@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-east-1",
+            "eventTime": "2025-10-04T09:24:40.330Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AWS:AIDATHOQ4MSHYZJXO47JQ"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "37.31.138.10"
+            },
+            "responseElements": {
+                "x-amz-request-id": "7G9P4BWCYBAW2G67",
+                "x-amz-id-2": "tuDmv2xf+fMZIW193CGb8Cb4FprIqpRD/NP+MvrtBOn1CXhKvNps1XLLNozhU+5bf045JGvrmeKs9sDjlPvii7I/nTtkiKfuD0LkPTr0OYg="
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "FileUploaded",
+                "bucket": {
+                    "name": "mateuszmidor-photo-album",
+                    "ownerIdentity": {
+                        "principalId": "A2WNFG3H52EQ82"
+                    },
+                    "arn": "arn:aws:s3:::mateuszmidor-photo-album"
+                },
+                "object": {
+                    "key": "image.jpeg",
+                    "size": 162661,
+                    "eTag": "e9dacaf5e87ae589e84c827615732ef3",
+                    "sequencer": "0068E0E7D83FE8C33B"
+                }
+            }
+        }
+    ]
+}
