@@ -9,8 +9,34 @@ import os
 import tempfile
 from PIL import Image
 
-# THUMB_PREFIX is to distinguish the generated thumbnails.
+# THUMB_PREFIX is added to thumbnail image name to distinguish the generated thumbnails from original images
 THUMB_PREFIX = 'thumb_'
+
+# HTML_TEMPLATE represents the index.html page, [NUM_IMAGES] and [THUMBNAILS] are placeholders repalced with dynamic data
+HTML_TEMPLATE = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Album</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .gallery { display: flex; flex-wrap: wrap; gap: 10px; }
+        .gallery-item { flex: 1 0 13%; box-sizing: border-box; margin-bottom: 10px; }
+        .gallery-item img { max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: block; }
+        .gallery-item { text-align: center; }
+        @media (max-width: 800px) { .gallery-item { flex-basis: 45%; } }
+        @media (max-width: 500px) { .gallery-item { flex-basis: 100%; } }
+    </style>
+</head>
+<body>
+    <h1>Photo Album - [NUM_IMAGES] images</h1>
+    <div class="gallery">
+[THUMBNAILS]
+    </div>
+</body>
+</html>
+'''
 
 # get_object_key retrieves the object_key from S3 event, e.g. "images/sky.jpg"
 def get_object_key(event):
@@ -122,28 +148,9 @@ def generate_index_html(bucket_name):
             if is_image(key) and is_thumbnail(key):
                 thumb_keys.append(key)
 
-    # 2. Create a gallery that displays the listed thumbnails, 7 per row. After clicking the thumbnail, the full-size image is opened in new tab
-    #    Assume all images are in the root or subfolders, and the full image is the same key without the prefix
-    gallery_html = '<!DOCTYPE html>\n<html lang="en">\n<head>\n'
-    gallery_html += '    <meta charset="UTF-8">\n'
-    gallery_html += '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-    gallery_html += '    <title>Photo Album</title>\n'
-    gallery_html += '    <style>\n'
-    gallery_html += '        body { font-family: Arial, sans-serif; }\n'
-    gallery_html += '        .gallery { display: flex; flex-wrap: wrap; gap: 10px; }\n'
-    gallery_html += '        .gallery-item { flex: 1 0 13%; box-sizing: border-box; margin-bottom: 10px; }\n'
-    gallery_html += '        .gallery-item img { max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: block; }\n'
-    gallery_html += '        .gallery-item { text-align: center; }\n'
-    gallery_html += '        @media (max-width: 800px) { .gallery-item { flex-basis: 45%; } }\n'
-    gallery_html += '        @media (max-width: 500px) { .gallery-item { flex-basis: 100%; } }\n'
-    gallery_html += '    </style>\n'
-    gallery_html += '</head>\n<body>\n'
-    gallery_html += f'    <h1>Photo Album - {len(thumb_keys)} images</h1>\n'
-    gallery_html += '    <div class="gallery">\n'
-
+    # 2. Generate the thumbnails HTML dynamically
+    thumbnails_html = ""
     for thumb_key in thumb_keys:
-        # Remove THUMB_PREFIX from basename to get original image key
-        import os
         dirname = os.path.dirname(thumb_key)
         basename = os.path.basename(thumb_key)
         if basename.startswith(THUMB_PREFIX):
@@ -157,12 +164,14 @@ def generate_index_html(bucket_name):
 
         thumb_url = f"/{thumb_key}"
         orig_url = f"/{orig_key}"
-        gallery_html += f'        <div class="gallery-item"><a href="{orig_url}" target="_blank"><img src="{thumb_url}" alt="Photo"></a></div>\n'
+        thumbnails_html += f'        <div class="gallery-item"><a href="{orig_url}" target="_blank"><img src="{thumb_url}" alt="Photo"></a></div>\n'
 
-    gallery_html += '    </div>\n'
-    gallery_html += '</body>\n</html>\n'
+    # 3. Insert dynamic data into HTML template
+    gallery_html = HTML_TEMPLATE
+    gallery_html = gallery_html.replace("[NUM_IMAGES]", str(len(thumb_keys)))
+    gallery_html = gallery_html.replace("[THUMBNAILS]", thumbnails_html)
 
-    # 3. Store the generated web page under bucket_name/index.html
+    # 4. Store the generated web page under bucket_name/index.html
     s3.put_object(
         Bucket=bucket_name,
         Key="index.html",
@@ -206,7 +215,7 @@ def handle_file_remove(bucket_name, object_key):
     # regenerate the gallery index page
     generate_index_html(bucket_name)
 
-# lambda_handler is the entry point to the Lambda; it is called in reponse to S3 Event Notification
+# lambda_handler is the entry point to the Lambda; it is called in reponse to S3 Event Notification (file create/delete)
 def lambda_handler(event, context):
     print ("starting photo album lambda_handler")
     print(event)
@@ -223,5 +232,5 @@ def lambda_handler(event, context):
         handle_file_remove(bucket_name, object_key)
         return "SUCCESS"
     else:
-        print("Not S3 File Upload Event; skipping")
+        print("Not S3 File Create/Delete Event; skipping")
         return "FAILURE"
