@@ -95,8 +95,8 @@ def is_S3_file_upload_event(event):
 def is_S3_file_remove_event(event):
     return is_S3_event(event, "ObjectRemoved:Delete")
 
-# make_thumb_key adds "thumb_" prefix to the object key, eg "images/sky.jpg" -> "images/thumb_sky.jpg"
-def make_thumb_key(object_key):
+# image_key_to_thumb_key adds "thumb_" prefix to the object key, eg "images/sky.jpg" -> "images/thumb_sky.jpg"
+def image_key_to_thumb_key(object_key):
     dirname = os.path.dirname(object_key)
     object_name = get_object_name(object_key)
 
@@ -105,6 +105,20 @@ def make_thumb_key(object_key):
         return f"{dirname}/{thumb_basename}"
     else:
         return thumb_basename
+
+# thumb_key_to_image_key removes "thumb_" prefix from the object key, eg "images/thumb_sky.jpg" -> "images/sky.jpg"
+def thumb_key_to_image_key(thumb_key):
+    dirname = os.path.dirname(thumb_key)
+    basename = os.path.basename(thumb_key)
+
+    if basename.startswith(THUMB_PREFIX):
+        orig_basename = basename[len(THUMB_PREFIX):]
+    else:
+        orig_basename = basename
+    if dirname and dirname != '.':
+        return f"{dirname}/{orig_basename}"
+    else:
+        return orig_basename
 
 # create_thumbnail creates a thumbnail of maximum size 256x256 pixels for image under bucket_name/object_key,
 # and saves it to S3 in provided bucket_name under object_key name prefixed with 'thumb_'
@@ -125,7 +139,7 @@ def create_thumbnail(bucket_name, object_key):
             img.save(thumb_path, format=img.format, exif=img._exif) # exif to avoid image being rotated
 
         # Upload thumbnail to S3
-        thumb_key = make_thumb_key(object_key)
+        thumb_key = image_key_to_thumb_key(object_key)
         print(f"creating thumbnail: {bucket_name}/{thumb_key}")
         s3.upload_file(thumb_path, bucket_name, thumb_key)
 
@@ -151,17 +165,7 @@ def generate_index_html(bucket_name):
     # 2. Generate the thumbnails HTML dynamically
     thumbnails_html = ""
     for thumb_key in thumb_keys:
-        dirname = os.path.dirname(thumb_key)
-        basename = os.path.basename(thumb_key)
-        if basename.startswith(THUMB_PREFIX):
-            orig_basename = basename[len(THUMB_PREFIX):]
-        else:
-            orig_basename = basename
-        if dirname and dirname != '.':
-            orig_key = f"{dirname}/{orig_basename}"
-        else:
-            orig_key = orig_basename
-
+        orig_key = thumb_key_to_image_key(thumb_key)
         thumb_url = f"/{thumb_key}"
         orig_url = f"/{orig_key}"
         thumbnails_html += f'        <div class="gallery-item"><a href="{orig_url}" target="_blank"><img src="{thumb_url}" alt="Photo"></a></div>\n'
@@ -207,7 +211,7 @@ def handle_file_remove(bucket_name, object_key):
         return
 
     # remove thumbnail image from S3
-    thumb_key = make_thumb_key(object_key)
+    thumb_key = image_key_to_thumb_key(object_key)
     print(f"removing thumbnail: {bucket_name}/{thumb_key}")
     s3 = boto3.client('s3')
     s3.delete_object(Bucket=bucket_name, Key=thumb_key)
